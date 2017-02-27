@@ -1,0 +1,15 @@
+extends: airbnb
+parser: babel-eslint
+plugins:
+  - react
+  - jsx-a11y
+  - import
+rules:
+  semi:
+    - 1
+    - never
+  react/prop-types:
+    - 2
+    - skipUndeclared: true
+env:
+  browser: true

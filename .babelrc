@@ -1,0 +1,22 @@
+{
+  "presets": [
+    [
+      "env", {
+        "modules": false,
+        "loose": false,
+        "useBuiltIns": false,
+        "targets": { "browsers": [
+          "last 2 versions",
+          "safari >= 9",
+          "ios_saf >= 8",
+          "not IE <= 10",
+          "chrome >= 49",
+          "firefox >= 47",
+          "> 1%"
+        ] }
+      }
+    ],
+    "stage-2",
+    "react"
+  ]
+}
