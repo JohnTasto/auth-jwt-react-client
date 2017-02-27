@@ -8,8 +8,12 @@ rules:
   semi:
     - 1
     - never
-  react/prop-types:
+  arrow-parens:
     - 2
+    - as-needed
+    - requireForBlockBody: false
+  react/prop-types:
+    - 1
     - skipUndeclared: true
 env:
   browser: true
