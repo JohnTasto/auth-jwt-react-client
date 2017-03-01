@@ -1,5 +1,7 @@
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const { getIfUtils } = require('webpack-config-utils')
 const { resolve } = require('path')
 
@@ -9,8 +11,8 @@ const VENDOR_LIBS = [
   'lodash',
 ]
 
-module.exports = (env) => {
-  const { ifNotProd } = getIfUtils(env)
+module.exports = env => {
+  const { ifProd, ifNotProd, ifTest } = getIfUtils(env)
   const config = {
     context: resolve('src'),
     entry: {
@@ -26,13 +28,16 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          use: 'babel-loader',
           test: /\.jsx?$/,
+          use: 'babel-loader',
           exclude: /node_modules/,
         },
         {
-          use: ['style-loader', 'css-loader'],
           test: /\.css$/,
+          loader: ExtractTextPlugin.extract({
+            use: 'css-loader',
+            fallback: 'style-loader',
+          }),
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/,
@@ -48,14 +53,18 @@ module.exports = (env) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env': {
+          NODE_ENV: ifProd('"production"', ifTest('"test"', '"development"')),
+        },
       }),
       new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor', 'manifest'],
       }),
+      new ExtractTextPlugin('styles.[name].[chunkhash].css'),
       new HtmlWebpackPlugin({
         template: 'index.html',
       }),
+      new ProgressBarPlugin(),
     ],
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
@@ -63,6 +72,7 @@ module.exports = (env) => {
     devServer: {
       historyApiFallback: true,
       contentBase: './',
+      // quiet: true,
     },
   }
   if (env.debug) {
