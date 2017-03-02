@@ -24,16 +24,6 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 }
 
 class Signup extends Component {
-  constructor(...args) {
-    super(...args)
-
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
-  }
-
-  handleFormSubmit(formProps) {
-    this.props.signupUser(formProps)
-  }
-
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -46,10 +36,10 @@ class Signup extends Component {
   }
 
   render() {
-    const { handleSubmit, invalid } = this.props
+    const { handleSubmit, invalid, submitting } = this.props
 
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit)}>
+      <form onSubmit={handleSubmit(this.props.signupUser)}>
         <Field
           name="email"
           type="email"
@@ -72,7 +62,7 @@ class Signup extends Component {
           validate={requiredValidator}
         />
         {this.renderAlert()}
-        <button action="submit" className="btn btn-primary" disabled={invalid}>
+        <button action="submit" className="btn btn-primary" disabled={invalid || submitting}>
           Sign up!
         </button>
       </form>

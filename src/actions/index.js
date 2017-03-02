@@ -19,7 +19,7 @@ export function authError(error) {
 export function signinUser({ email, password }) {
   return function signinUserThunk(dispatch) {
     // Submit email/password to the server
-    axios.post(`${ROOT_URL}/signin`, { email, password })
+    return axios.post(`${ROOT_URL}/signin`, { email, password })
       .then(response => {
         // If request is good...
         // - Update state to indicate user is authenticated
@@ -38,7 +38,7 @@ export function signinUser({ email, password }) {
 
 export function signupUser({ email, password }) {
   return function signupUserThunk(dispatch) {
-    axios.post(`${ROOT_URL}/signup`, { email, password })
+    return axios.post(`${ROOT_URL}/signup`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
