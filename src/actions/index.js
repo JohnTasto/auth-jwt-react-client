@@ -29,10 +29,9 @@ export function signinUser({ email, password }) {
         // - redirect to the route '/feature'
         browserHistory.push('/feature')
       })
-      .catch(() => {
-        // If request is bad...
-        // - Show an error to the user
-        dispatch(authError('Bad Login Info'))
+      .catch(error => {
+        console.dir(error)
+        dispatch(authError(error.data ? error.data.message : error.message))
       })
   }
 }
@@ -45,7 +44,10 @@ export function signupUser({ email, password }) {
         localStorage.setItem('token', response.data.token)
         browserHistory.push('/feature')
       })
-      .catch(response => dispatch(authError(response.data.error)))
+      .catch(error => {
+        console.dir(error)
+        dispatch(authError(error.data ? error.data.message : error.message))
+      })
   }
 }
 

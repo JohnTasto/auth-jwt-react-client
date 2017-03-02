@@ -1,10 +1,22 @@
 import React, { Component } from 'react'
-import { reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
+import { Field, reduxForm } from 'redux-form'
 import { v4 } from 'uuid'
 import * as actions from '../../actions'
+import { requiredValidator, emailValidator } from '../../helpers/validators'
 
-const emailID = v4()
-const passwordID = v4()
+const renderField = ({ input, label, type, meta: { touched, error } }) => {
+  const id = v4()
+  return (
+    <fieldset className="form-group">
+      <label htmlFor={id}>{label}</label>
+      <div>
+        <input id={id} {...input} placeholder={label} type={type} className="form-control" />
+        {touched && error && <span>{error}</span>}
+      </div>
+    </fieldset>
+  )
+}
 
 class Signin extends Component {
   constructor(...args) {
@@ -14,7 +26,6 @@ class Signin extends Component {
   }
 
   handleFormSubmit({ email, password }) {
-    // Need to do something to log user in
     this.props.signinUser({ email, password })
   }
 
@@ -22,38 +33,46 @@ class Signin extends Component {
     if (this.props.errorMessage) {
       return (
         <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
+          <strong>Error:</strong> {this.props.errorMessage}
         </div>
       )
     }
-    return <div />
+    return ''
   }
 
   render() {
-    const { handleSubmit, fields: { email, password } } = this.props
+    const { handleSubmit, invalid } = this.props
 
     return (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-        <fieldset className="form-group">
-          <label htmlFor={emailID}>Email:</label>
-          <input id={emailID} {...email} className="form-control" />
-        </fieldset>
-        <fieldset className="form-group">
-          <label htmlFor={passwordID}>Password:</label>
-          <input id={passwordID} {...password} type="password" className="form-control" />
-        </fieldset>
+        <Field
+          name="email"
+          type="email"
+          component={renderField}
+          label="Email"
+          validate={[requiredValidator, emailValidator]}
+        />
+        <Field
+          name="password"
+          type="password"
+          component={renderField}
+          label="Password"
+          validate={requiredValidator}
+        />
         {this.renderAlert()}
-        <button action="submit" className="btn btn-primary">Sign in</button>
+        <button action="submit" className="btn btn-primary" disabled={invalid}>
+          Sign in
+        </button>
       </form>
     )
   }
 }
 
-function mapStateToProps(state) {
-  return { errorMessage: state.auth.error }
-}
-
-export default reduxForm({
+export default connect(
+  state => ({
+    errorMessage: state.auth.error,
+  }),
+  actions,
+)(reduxForm({
   form: 'signin',
-  fields: ['email', 'password'],
-}, mapStateToProps, actions)(Signin)
+})(Signin))
