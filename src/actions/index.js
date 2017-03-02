@@ -31,7 +31,10 @@ export function signinUser({ email, password }) {
       })
       .catch(error => {
         console.dir(error)
-        dispatch(authError(error.data ? error.data.message : error.message))
+        const message = error.response && error.response.status === 401
+          ? 'Invalid credentials'
+          : 'Network error'
+        dispatch(authError(message))
       })
   }
 }
@@ -46,7 +49,10 @@ export function signupUser({ email, password }) {
       })
       .catch(error => {
         console.dir(error)
-        dispatch(authError(error.data ? error.data.message : error.message))
+        const message = error.response && error.response.status === 422
+          ? error.response.data.error
+          : 'Network error'
+        dispatch(authError(message))
       })
   }
 }
