@@ -68,5 +68,12 @@ export function fetchMessage() {
           payload: response.data.message,
         })
       })
+      .catch(error => {
+        if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
+        if (error.response && error.response.status === 401) {
+          dispatch(signoutUser())
+          browserHistory.push('/signin')
+        }
+      })
   }
 }
