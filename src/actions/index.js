@@ -25,7 +25,7 @@ export function signinUser({ email, password }) {
         browserHistory.push('/feature')
       })
       .catch(error => {
-        console.dir(error)
+        if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
         const message = error.response && error.response.status === 401
           ? 'Invalid credentials'
           : 'Network error'
@@ -43,7 +43,7 @@ export function signupUser({ email, password }) {
         browserHistory.push('/feature')
       })
       .catch(error => {
-        console.dir(error)
+        if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
         const message = error.response && error.response.status === 422
           ? error.response.data.error
           : 'Network error'
