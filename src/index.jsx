@@ -12,8 +12,8 @@ import Signup from './components/auth/signup'
 import Feature from './components/feature'
 import RequireAuth from './components/auth/require_auth'
 import Welcome from './components/welcome'
-import reducers from './reducers'
-import { AUTH_USER } from './actions/types'
+import reducers from './ducks'
+import { AUTH_USER } from './ducks/auth'
 
 import './style/style.css'
 

@@ -1,13 +1,12 @@
 import axios from 'axios'
 import { browserHistory } from 'react-router'
-import {
-  AUTH_USER,
-  UNAUTH_USER,
-  AUTH_ERROR,
-  FETCH_MESSAGE,
-} from './types'
 
-const ROOT_URL = 'http://localhost:3090'
+export const AUTH_USER = 'auth_user'
+export const UNAUTH_USER = 'unauth_user'
+export const AUTH_ERROR = 'auth_error'
+export const FETCH_MESSAGE = 'fetch_message'
+
+const ROOT_URL = 'http://localhost:9090'
 
 export function authError(error) {
   return {
@@ -76,4 +75,20 @@ export function fetchMessage() {
         }
       })
   }
+}
+
+
+export default function (state = {}, action) {
+  switch (action.type) {  // eslint-disable-line default-case
+    case AUTH_USER:
+      return { ...state, error: '', authenticated: true }
+    case UNAUTH_USER:
+      return { ...state, authenticated: false }
+    case AUTH_ERROR:
+      return { ...state, error: action.payload }
+    case FETCH_MESSAGE:
+      return { ...state, message: action.payload }
+  }
+
+  return state
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { v4 } from 'uuid'
-import * as actions from '../../actions'
+import * as actions from '../../ducks/auth'
 import {
   requiredValidator,
   emailValidator,
