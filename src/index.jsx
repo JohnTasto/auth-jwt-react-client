@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-import reduxThunk from 'redux-thunk'
+
+import createStore from './store'
 
 import App from './components/app'
 import Signin from './components/auth/signin'
@@ -12,13 +12,11 @@ import Signup from './components/auth/signup'
 import Feature from './components/feature'
 import RequireAuth from './components/auth/require_auth'
 import Welcome from './components/welcome'
-import reducers from './ducks'
 import { AUTH_USER } from './ducks/auth'
 
 import './style/style.css'
 
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore)
-const store = createStoreWithMiddleware(reducers)
+const store = createStore()
 
 const token = localStorage.getItem('token')
 if (token) store.dispatch({ type: AUTH_USER })
