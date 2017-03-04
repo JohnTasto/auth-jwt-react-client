@@ -49,6 +49,13 @@ module.exports = env => {
             'image-webpack-loader',
           ],
         },
+        {
+          test: /\.ico$/,
+          use: [{
+            loader: 'file-loader',
+            options: { name: '[name].[ext]' },
+          }],
+        },
       ],
     },
     plugins: [

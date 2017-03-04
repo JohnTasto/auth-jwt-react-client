@@ -11,6 +11,8 @@ import { AUTH_USER } from './ducks/auth'
 
 import './style/style.css'
 
+require('./favicon.ico')
+
 const store = createStore()
 const history = syncHistoryWithStore(browserHistory, store)
 
