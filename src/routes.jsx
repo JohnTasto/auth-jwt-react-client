@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
-import App from './components/app'
-import Signin from './components/auth/signin'
-import Signout from './components/auth/signout'
-import Signup from './components/auth/signup'
-import Feature from './components/feature'
-import RequireAuth from './components/auth/require_auth'
-import Welcome from './components/welcome'
+import App from './components/App'
+import Signin from './components/auth/SignIn'
+import Signout from './components/auth/SignOut'
+import Signup from './components/auth/SignUp'
+import Feature from './components/Feature'
+import RequireAuth from './components/auth/requireAuth'
+import Welcome from './components/Welcome'
 
 export default (
   <Route path="/" component={App}>

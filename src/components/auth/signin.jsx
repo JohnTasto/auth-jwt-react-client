@@ -18,7 +18,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
   )
 }
 
-class Signin extends Component {
+class SignIn extends Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -65,4 +65,4 @@ export default connect(
   actions,
 )(reduxForm({
   form: 'signin',
-})(Signin))
+})(SignIn))
