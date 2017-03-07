@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import renderer from 'react-test-renderer'  // eslint-disable-line import/no-extraneous-dependencies
+import renderer from 'react-test-renderer'
 import { Header } from './Header'
 
 describe('<Header />', () => {
