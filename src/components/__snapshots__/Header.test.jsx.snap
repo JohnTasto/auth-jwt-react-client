@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header Renders signin/signup links if not authenticated 1`] = `
+exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
 <nav
   className="navbar navbar-light"
 >
@@ -40,7 +40,7 @@ exports[`Header Renders signin/signup links if not authenticated 1`] = `
 </nav>
 `;
 
-exports[`Header Renders signout link if authenticated 1`] = `
+exports[`<Header /> Renders signout link if authenticated 1`] = `
 <nav
   className="navbar navbar-light"
 >

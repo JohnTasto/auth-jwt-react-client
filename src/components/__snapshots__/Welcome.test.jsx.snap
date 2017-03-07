@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Welcome Renders correctly 1`] = `
+exports[`<Welcome /> Renders correctly 1`] = `
 <div>
   Welcome to our slice of paradise
 </div>
