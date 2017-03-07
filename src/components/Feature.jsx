@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../ducks/auth'
 
-class Feature extends Component {
+export class Feature extends Component {
   componentWillMount() {
     this.props.fetchMessage()
   }
