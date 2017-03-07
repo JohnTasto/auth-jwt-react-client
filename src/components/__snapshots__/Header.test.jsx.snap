@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header Renders signin/signup links if not authenticated 1`] = `
+<nav
+  className="navbar navbar-light"
+>
+  <a
+    className="navbar-brand"
+    onClick={[Function]}
+    style={Object {}}
+  >
+    Redux Auth
+  </a>
+  <ul
+    className="nav navbar-nav"
+  >
+    <li
+      className="nav-item"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        Sign In
+      </a>
+    </li>
+    <li
+      className="nav-item"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        Sign Up
+      </a>
+    </li>
+  </ul>
+</nav>
+`;
+
+exports[`Header Renders signout link if authenticated 1`] = `
+<nav
+  className="navbar navbar-light"
+>
+  <a
+    className="navbar-brand"
+    onClick={[Function]}
+    style={Object {}}
+  >
+    Redux Auth
+  </a>
+  <ul
+    className="nav navbar-nav"
+  >
+    <li
+      className="nav-item"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        Sign Out
+      </a>
+    </li>
+  </ul>
+</nav>
+`;
