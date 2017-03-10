@@ -21,6 +21,8 @@ rules:
       - "**/*.spec.js?(x)"
       optionalDependencies: false
       peerDependencies: false
+  import/no-named-as-default:
+    - 0
   react/prop-types:
     - 1
     - skipUndeclared: true
