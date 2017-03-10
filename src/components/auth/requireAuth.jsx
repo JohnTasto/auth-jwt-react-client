@@ -1,33 +1,31 @@
 import React, { Component } from 'react'
+import { browserHistory as history } from 'react-router'
 import { connect } from 'react-redux'
 
-export default function (ComposedComponent) {
-  class Authentication extends Component {
+export function requireAuth(path) {
+  return ComposedComponent =>
 
-    static contextTypes = {
-      router: React.PropTypes.object,
-    }
+    class extends Component {
 
-    componentWillMount() {
-      if (!this.props.authenticated) {
-        this.context.router.push('/')
+      componentWillMount() {
+        if (!this.props.authenticated) history.push(path)
+      }
+
+      componentWillUpdate(nextProps) {
+        if (!nextProps.authenticated) history.push(path)
+      }
+
+      render() {
+        return <ComposedComponent {...this.props} />
       }
     }
+}
 
-    componentWillUpdate(nextProps) {
-      if (!nextProps.authenticated) {
-        this.context.router.push('/')
-      }
-    }
 
-    render() {
-      return <ComposedComponent {...this.props} />
-    }
-  }
-
+export default path => ComposedComponent => {
   function mapStateToProps(state) {
     return { authenticated: state.auth.authenticated }
   }
 
-  return connect(mapStateToProps)(Authentication)
+  return connect(mapStateToProps)(requireAuth(path)(ComposedComponent))
 }
