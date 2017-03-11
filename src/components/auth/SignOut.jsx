@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../ducks/auth'
 
-class SignOut extends Component {
+export class SignOut extends Component {
   componentWillMount() {
     this.props.signoutUser()
   }
