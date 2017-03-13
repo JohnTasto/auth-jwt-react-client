@@ -6,18 +6,19 @@ import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
 import createStore from '../../store'
-import * as actions from '../../ducks/auth'
 import SignOut, { SignOut as SignOutComp } from './SignOut'
 
 describe('<SignOut />', () => {
   test('Calls action signoutUser before mount', () => {
-    actions.signoutUser = jest.fn(() => ({ type: '' }))
+    const props = {
+      signoutUser: jest.fn(),
+    }
     mount(
       <Provider store={createStore()}>
-        <SignOut />
+        <SignOut {...props} />
       </Provider>,
     )
-    expect(actions.signoutUser.mock.calls.length).toBe(1)
+    expect(props.signoutUser.mock.calls.length).toBe(1)
   })
 
   test('Renders a message', () => {

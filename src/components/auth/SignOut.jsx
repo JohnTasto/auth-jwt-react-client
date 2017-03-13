@@ -12,4 +12,7 @@ export class SignOut extends Component {
   }
 }
 
-export default connect(null, actions)(SignOut)
+const mergeProps = (...props) =>
+  Object.assign({}, ...props)
+
+export default connect(null, actions, mergeProps)(SignOut)
