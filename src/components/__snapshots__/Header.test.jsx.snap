@@ -4,37 +4,40 @@ exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
 <nav
   className="navbar navbar-light"
 >
-  <a
+  <Link
     className="navbar-brand"
-    onClick={[Function]}
+    onlyActiveOnIndex={false}
     style={Object {}}
+    to="/"
   >
     Redux Auth
-  </a>
+  </Link>
   <ul
     className="nav navbar-nav"
   >
     <li
       className="nav-item"
     >
-      <a
+      <Link
         className="nav-link"
-        onClick={[Function]}
+        onlyActiveOnIndex={false}
         style={Object {}}
+        to="/signin"
       >
         Sign In
-      </a>
+      </Link>
     </li>
     <li
       className="nav-item"
     >
-      <a
+      <Link
         className="nav-link"
-        onClick={[Function]}
+        onlyActiveOnIndex={false}
         style={Object {}}
+        to="/signup"
       >
         Sign Up
-      </a>
+      </Link>
     </li>
   </ul>
 </nav>
@@ -44,26 +47,28 @@ exports[`<Header /> Renders signout link if authenticated 1`] = `
 <nav
   className="navbar navbar-light"
 >
-  <a
+  <Link
     className="navbar-brand"
-    onClick={[Function]}
+    onlyActiveOnIndex={false}
     style={Object {}}
+    to="/"
   >
     Redux Auth
-  </a>
+  </Link>
   <ul
     className="nav navbar-nav"
   >
     <li
       className="nav-item"
     >
-      <a
+      <Link
         className="nav-link"
-        onClick={[Function]}
+        onlyActiveOnIndex={false}
         style={Object {}}
+        to="/signout"
       >
         Sign Out
-      </a>
+      </Link>
     </li>
   </ul>
 </nav>
