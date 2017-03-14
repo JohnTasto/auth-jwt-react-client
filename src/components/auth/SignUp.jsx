@@ -17,13 +17,13 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
       <label htmlFor={id}>{label}</label>
       <div>
         <input id={id} {...input} placeholder={label} type={type} className="form-control" />
-        {touched && error && <span>{error}</span>}
+        {touched && error && <span className="error">{error}</span>}
       </div>
     </fieldset>
   )
 }
 
-class SignUp extends Component {
+export class SignUp extends Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -85,6 +85,8 @@ export default connect(
     errorMessage: state.auth.error,
   }),
   actions,
+  (...props) =>
+    Object.assign({}, ...props),
 )(reduxForm({
   form: 'signup',
   validate,
