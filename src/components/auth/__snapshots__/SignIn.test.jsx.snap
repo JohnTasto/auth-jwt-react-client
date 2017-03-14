@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignOut /> Renders correctly 1`] = `
+<form>
+  <Field
+    component={[Function]}
+    label="Email"
+    name="email"
+    type="email"
+    validate={
+      Array [
+        [Function],
+        [Function],
+      ]
+    }
+  />
+  <Field
+    component={[Function]}
+    label="Password"
+    name="password"
+    type="password"
+    validate={[Function]}
+  />
+  <button
+    action="submit"
+    className="btn btn-primary"
+  >
+    Sign in
+  </button>
+</form>
+`;
