@@ -16,8 +16,12 @@ describe('<SignOut />', () => {
   })
 
   describe('Integration', () => {
+    const emailError = 'input[name="email"] ~ .error'
+    const passwordError = 'input[name="password"] ~ .error'
+
     let wrapper
     let props
+    let submitButton
 
     beforeEach(() => {
       props = {
@@ -28,6 +32,7 @@ describe('<SignOut />', () => {
           <SignIn {...props} />
         </Provider>,
       )
+      submitButton = wrapper.find('[action="submit"]')
     })
 
 
@@ -36,11 +41,8 @@ describe('<SignOut />', () => {
         email: 'e@m.ail',
         password: 'password',
       }
-      const emailError = 'input[name="email"] ~ .error'
-      const passwordError = 'input[name="password"] ~ .error'
-      const submitButton = wrapper.find('[action="submit"]')
 
-      // should have no errors
+      // should have no errors, submit button disabled
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
       expect(submitButton.props().disabled).toBe(true)
@@ -49,7 +51,7 @@ describe('<SignOut />', () => {
       wrapper.find('[name="email"]').simulate('change', { target: { value: user.email } })
       wrapper.find('[name="password"]').simulate('change', { target: { value: user.password } })
 
-      // should still have no errors
+      // should still have no errors, submit button enabled
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
       expect(submitButton.props().disabled).toBe(false)
@@ -63,13 +65,11 @@ describe('<SignOut />', () => {
 
 
     test('Displays error and disables submit button on empty input', () => {
-      const emailError = 'input[name="email"] ~ .error'
-      const passwordError = 'input[name="password"] ~ .error'
 
       // should have no errors
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
-      expect(wrapper.find('[action="submit"]').props().disabled).toBe(true)
+      expect(submitButton.props().disabled).toBe(true)
 
       // simulate empty form fill
       wrapper.find('input[name="email"]').simulate('blur')
@@ -78,15 +78,15 @@ describe('<SignOut />', () => {
       // should now have errors
       expect(wrapper.find(emailError).length).toBe(1)
       expect(wrapper.find(passwordError).length).toBe(1)
-      expect(wrapper.find('[action="submit"]').props().disabled).toBe(true)
+      expect(submitButton.props().disabled).toBe(true)
     })
 
 
     test('Displays error on malformed email', () => {
-      const emailError = 'input[name="email"] ~ .error'
 
       // should have no error
       expect(wrapper.find(emailError).length).toBe(0)
+      expect(submitButton.props().disabled).toBe(true)
 
       // simulate entering malformed email
       wrapper.find('input[name="email"]')
@@ -95,6 +95,7 @@ describe('<SignOut />', () => {
 
       // should now have error
       expect(wrapper.find(emailError).length).toBe(1)
+      expect(submitButton.props().disabled).toBe(true)
     })
   })
 })
