@@ -42,9 +42,9 @@ describe('auth actions', () => {
       email: 'email',
       password: 'password',
     }
-    const token = '12345'
 
     test('on sucessful login: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+      const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(200, { token })
@@ -65,7 +65,7 @@ describe('auth actions', () => {
     test('on unsucessful login: creates AUTH_ERROR - Invalid credentials', () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
-        .reply(401, { token })
+        .reply(401)
       const expectedActions = [{
         type: auth.AUTH_ERROR,
         payload: 'Invalid credentials',
