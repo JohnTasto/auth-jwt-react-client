@@ -4,7 +4,7 @@ import * as actions from '../../ducks/auth'
 
 export class SignOut extends Component {
   componentWillMount() {
-    this.props.signoutUser()
+    this.props.signOutUser()
   }
 
   render() {

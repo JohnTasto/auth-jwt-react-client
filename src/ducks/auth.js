@@ -15,8 +15,8 @@ export function authError(error) {
   }
 }
 
-export function signinUser({ email, password }) {
-  return function signinUserThunk(dispatch) {
+export function signInUser({ email, password }) {
+  return function signInUserThunk(dispatch) {
     return axios.post(`${API_ROOT}/signin`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER })
@@ -33,8 +33,8 @@ export function signinUser({ email, password }) {
   }
 }
 
-export function signupUser({ email, password }) {
-  return function signupUserThunk(dispatch) {
+export function signUpUser({ email, password }) {
+  return function signUpUserThunk(dispatch) {
     return axios.post(`${API_ROOT}/signup`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER })
@@ -51,7 +51,7 @@ export function signupUser({ email, password }) {
   }
 }
 
-export function signoutUser() {
+export function signOutUser() {
   localStorage.removeItem('token')
   return { type: UNAUTH_USER }
 }
@@ -70,7 +70,7 @@ export function fetchMessage() {
       .catch(error => {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
         if (error.response && error.response.status === 401) {
-          dispatch(signoutUser())
+          dispatch(signOutUser())
           browserHistory.push('/signin')
         }
       })

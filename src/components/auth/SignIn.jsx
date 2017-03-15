@@ -34,7 +34,7 @@ export class SignIn extends Component {
     const { handleSubmit, invalid, submitting } = this.props
 
     return (
-      <form onSubmit={handleSubmit(this.props.signinUser)}>
+      <form onSubmit={handleSubmit(this.props.signInUser)}>
         <Field
           name="email"
           type="email"
@@ -66,5 +66,5 @@ export default connect(
   (...props) =>
     Object.assign({}, ...props),
 )(reduxForm({
-  form: 'signin',
+  form: 'signIn',
 })(SignIn))

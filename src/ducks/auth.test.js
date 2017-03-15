@@ -37,13 +37,13 @@ describe('auth actions', () => {
     nock.enableNetConnect()
   })
 
-  describe('signinUser()', () => {
+  describe('signInUser()', () => {
     const user = {
       email: 'email',
       password: 'password',
     }
 
-    test('on sucessful signin: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage, and redirects', () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signin', user)
@@ -53,7 +53,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signinUser(user))
+      return store.dispatch(auth.signInUser(user))
         .then(() => {
           expect(scope.isDone()).toBe(true)
           expect(store.getActions()).toEqual(expectedActions)
@@ -62,7 +62,7 @@ describe('auth actions', () => {
         })
     })
 
-    test('on unsucessful signin: creates AUTH_ERROR - Invalid credentials', () => {
+    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(401)
@@ -72,7 +72,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signinUser(user))
+      return store.dispatch(auth.signInUser(user))
         .then(() => {
           expect(scope.isDone()).toBe(true)
           expect(store.getActions()).toEqual(expectedActions)
@@ -86,7 +86,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signinUser(user))
+      return store.dispatch(auth.signInUser(user))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
         })
@@ -94,13 +94,13 @@ describe('auth actions', () => {
   })
 
 
-  describe('signupUser()', () => {
+  describe('signUpUser()', () => {
     const user = {
       email: 'email',
       password: 'password',
     }
 
-    test('on sucessful signup: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage, and redirects', () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signup', user)
@@ -110,7 +110,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signupUser(user))
+      return store.dispatch(auth.signUpUser(user))
         .then(() => {
           expect(scope.isDone()).toBe(true)
           expect(store.getActions()).toEqual(expectedActions)
@@ -119,7 +119,7 @@ describe('auth actions', () => {
         })
     })
 
-    test('on unsucessful signup: creates AUTH_ERROR - <server message>', () => {
+    test('on unsucessful signUp: creates AUTH_ERROR - <server message>', () => {
       const error = 'ERROR!'
       const scope = nock(API_ROOT)
         .post('/signup', user)
@@ -130,7 +130,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signupUser(user))
+      return store.dispatch(auth.signUpUser(user))
         .then(() => {
           expect(scope.isDone()).toBe(true)
           expect(store.getActions()).toEqual(expectedActions)
@@ -144,7 +144,7 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signupUser(user))
+      return store.dispatch(auth.signUpUser(user))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
         })

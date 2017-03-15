@@ -26,7 +26,7 @@ describe('<SignUp />', () => {
 
     beforeEach(() => {
       props = {
-        signupUser: jest.fn(),
+        signUpUser: jest.fn(),
       }
       wrapper = mount(
         <Provider store={createStore()}>
@@ -37,7 +37,7 @@ describe('<SignUp />', () => {
     })
 
 
-    test('Calls action signupUser with specified email and password', () => {
+    test('Calls action signUpUser with specified email and password', () => {
       const user = {
         email: 'e@m.ail',
         password: 'Password1',
@@ -65,7 +65,7 @@ describe('<SignUp />', () => {
       wrapper.find('form').simulate('submit')
 
       // verify result
-      expect(props.signupUser.mock.calls[0][0]).toEqual(user)
+      expect(props.signUpUser.mock.calls[0][0]).toEqual(user)
     })
 
 
