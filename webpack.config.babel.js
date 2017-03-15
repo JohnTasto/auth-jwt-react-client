@@ -14,7 +14,7 @@ const VENDOR_LIBS = [
 ]
 
 module.exports = env => {
-  const { ifProd, ifNotProd, ifTest } = getIfUtils(env)
+  const { ifProd, ifNotProd } = getIfUtils(env)
   const config = {
     context: resolve('src'),
     entry: {
@@ -63,7 +63,6 @@ module.exports = env => {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: ifProd('"production"', ifTest('"test"', '"development"')),
           NODE_ENV: ifProd('"production"', '"development"'),
           API_ROOT: process.env.API_ROOT || '"http://localhost:9090"',
         },
