@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import 'babel-polyfill'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -43,7 +44,7 @@ describe('auth actions', () => {
       password: 'password',
     }
 
-    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage, and redirects', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signin', user)
@@ -53,16 +54,15 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signInUser(user))
-        .then(() => {
-          expect(scope.isDone()).toBe(true)
-          expect(store.getActions()).toEqual(expectedActions)
-          expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
-          expect(browserHistory.push.mock.calls.length).toBe(1)
-        })
+      await store.dispatch(auth.signInUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
+      expect(browserHistory.push.mock.calls.length).toBe(1)
     })
 
-    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', () => {
+    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', async () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(401)
@@ -72,24 +72,22 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signInUser(user))
-        .then(() => {
-          expect(scope.isDone()).toBe(true)
-          expect(store.getActions()).toEqual(expectedActions)
-        })
+      await store.dispatch(auth.signInUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
     })
 
-    test('on any other error: creates AUTH_ERROR - Network error', () => {
+    test('on any other error: creates AUTH_ERROR - Network error', async () => {
       const expectedActions = [{
         type: auth.AUTH_ERROR,
         payload: 'Network error',
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signInUser(user))
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions)
-        })
+      await store.dispatch(auth.signInUser(user))
+
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
@@ -100,7 +98,7 @@ describe('auth actions', () => {
       password: 'password',
     }
 
-    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage, and redirects', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signup', user)
@@ -110,16 +108,15 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signUpUser(user))
-        .then(() => {
-          expect(scope.isDone()).toBe(true)
-          expect(store.getActions()).toEqual(expectedActions)
-          expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
-          expect(browserHistory.push.mock.calls.length).toBe(1)
-        })
+      await store.dispatch(auth.signUpUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
+      expect(browserHistory.push.mock.calls.length).toBe(1)
     })
 
-    test('on unsucessful signUp: creates AUTH_ERROR - <server message>', () => {
+    test('on unsucessful signUp: creates AUTH_ERROR - <server message>', async () => {
       const error = 'ERROR!'
       const scope = nock(API_ROOT)
         .post('/signup', user)
@@ -130,24 +127,22 @@ describe('auth actions', () => {
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signUpUser(user))
-        .then(() => {
-          expect(scope.isDone()).toBe(true)
-          expect(store.getActions()).toEqual(expectedActions)
-        })
+      await store.dispatch(auth.signUpUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
     })
 
-    test('on any other error: creates AUTH_ERROR - Network error', () => {
+    test('on any other error: creates AUTH_ERROR - Network error', async () => {
       const expectedActions = [{
         type: auth.AUTH_ERROR,
         payload: 'Network error',
       }]
       const store = mockStore()
 
-      return store.dispatch(auth.signUpUser(user))
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions)
-        })
+      await store.dispatch(auth.signUpUser(user))
+
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 })
