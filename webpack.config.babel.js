@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -62,6 +64,8 @@ module.exports = env => {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: ifProd('"production"', ifTest('"test"', '"development"')),
+          NODE_ENV: ifProd('"production"', '"development"'),
+          API_ROOT: process.env.API_ROOT || '"http://localhost:9090"',
         },
       }),
       new webpack.optimize.CommonsChunkPlugin({

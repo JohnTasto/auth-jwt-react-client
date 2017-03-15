@@ -6,7 +6,7 @@ export const UNAUTH_USER = 'unauth_user'
 export const AUTH_ERROR = 'auth_error'
 export const FETCH_MESSAGE = 'fetch_message'
 
-const ROOT_URL = 'http://localhost:9090'
+const API_ROOT = process.env.API_ROOT
 
 export function authError(error) {
   return {
@@ -17,7 +17,7 @@ export function authError(error) {
 
 export function signinUser({ email, password }) {
   return function signinUserThunk(dispatch) {
-    return axios.post(`${ROOT_URL}/signin`, { email, password })
+    return axios.post(`${API_ROOT}/signin`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
@@ -35,7 +35,7 @@ export function signinUser({ email, password }) {
 
 export function signupUser({ email, password }) {
   return function signupUserThunk(dispatch) {
-    return axios.post(`${ROOT_URL}/signup`, { email, password })
+    return axios.post(`${API_ROOT}/signup`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
@@ -58,7 +58,7 @@ export function signoutUser() {
 
 export function fetchMessage() {
   return function fetchMessageThunk(dispatch) {
-    axios.get(ROOT_URL, {
+    axios.get(API_ROOT, {
       headers: { authorization: localStorage.getItem('token') },
     })
       .then(response => {
