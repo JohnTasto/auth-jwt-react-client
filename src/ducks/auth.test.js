@@ -92,4 +92,62 @@ describe('auth actions', () => {
         })
     })
   })
+
+
+  describe('signupUser()', () => {
+    const user = {
+      email: 'email',
+      password: 'password',
+    }
+
+    test('on sucessful signup: creates AUTH_USER, sets token in localStorage, and redirects', () => {
+      const token = '12345'
+      const scope = nock(API_ROOT)
+        .post('/signup', user)
+        .reply(200, { token })
+      const expectedActions = [{
+        type: auth.AUTH_USER,
+      }]
+      const store = mockStore()
+
+      return store.dispatch(auth.signupUser(user))
+        .then(() => {
+          expect(scope.isDone()).toBe(true)
+          expect(store.getActions()).toEqual(expectedActions)
+          expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
+          expect(browserHistory.push.mock.calls.length).toBe(1)
+        })
+    })
+
+    test('on unsucessful signup: creates AUTH_ERROR - <server message>', () => {
+      const error = 'ERROR!'
+      const scope = nock(API_ROOT)
+        .post('/signup', user)
+        .reply(422, { error })
+      const expectedActions = [{
+        type: auth.AUTH_ERROR,
+        payload: error,
+      }]
+      const store = mockStore()
+
+      return store.dispatch(auth.signupUser(user))
+        .then(() => {
+          expect(scope.isDone()).toBe(true)
+          expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    test('on any other error: creates AUTH_ERROR - Network error', () => {
+      const expectedActions = [{
+        type: auth.AUTH_ERROR,
+        payload: 'Network error',
+      }]
+      const store = mockStore()
+
+      return store.dispatch(auth.signupUser(user))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+  })
 })
