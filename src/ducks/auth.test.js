@@ -28,6 +28,7 @@ describe('auth actions', () => {
   beforeEach(() => {
     window.localStorage = {
       setItem: jest.fn(),
+      removeItem: jest.fn(),
     }
     browserHistory.push = jest.fn()
     nock.disableNetConnect()
@@ -143,6 +144,21 @@ describe('auth actions', () => {
       await store.dispatch(auth.signUpUser(user))
 
       expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+
+  describe('signOutUser()', () => {
+    test('on signOut: creates UNAUTH_USER, removes token in localStorage', () => {
+      const expectedActions = [{
+        type: auth.UNAUTH_USER,
+      }]
+      const store = mockStore()
+
+      store.dispatch(auth.signOutUser())
+
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.removeItem.mock.calls[0]).toEqual(['token'])
     })
   })
 })
