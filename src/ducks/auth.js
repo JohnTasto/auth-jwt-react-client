@@ -58,7 +58,7 @@ export function signOutUser() {
 
 export function fetchMessage() {
   return function fetchMessageThunk(dispatch) {
-    axios.get(API_ROOT, {
+    return axios.get(API_ROOT, {
       headers: { authorization: localStorage.getItem('token') },
     })
       .then(response => {
@@ -71,7 +71,6 @@ export function fetchMessage() {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
         if (error.response && error.response.status === 401) {
           dispatch(signOutUser())
-          browserHistory.push('/signin')
         }
       })
   }

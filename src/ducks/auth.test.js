@@ -149,7 +149,7 @@ describe('auth actions', () => {
 
 
   describe('signOutUser()', () => {
-    test('on signOut: creates UNAUTH_USER, removes token in localStorage', () => {
+    test('on signOut: creates UNAUTH_USER, removes token from localStorage', () => {
       const expectedActions = [{
         type: auth.UNAUTH_USER,
       }]
@@ -158,6 +158,49 @@ describe('auth actions', () => {
       store.dispatch(auth.signOutUser())
 
       expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.removeItem.mock.calls[0]).toEqual(['token'])
+    })
+  })
+
+
+  describe('fetchMessage()', () => {
+    test('on sucessful fetch: creates FETCH_MESSAGE, gets token in localStorage', async () => {
+      const token = '12345'
+      const message = 'Hey'
+      window.localStorage.getItem = jest.fn(() => token)
+      const scope = nock(API_ROOT, {
+        reqheaders: { authorization: token },
+      })
+        .get('/')
+        .reply(200, { message })
+      const expectedActions = [{
+        type: auth.FETCH_MESSAGE,
+        payload: message,
+      }]
+      const store = mockStore()
+
+      await store.dispatch(auth.fetchMessage())
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.getItem.mock.calls[0]).toEqual(['token'])
+    })
+
+    test('on unsucessful fetch: creates UNAUTH_USER, removes token from localStorage', async () => {
+      window.localStorage.getItem = jest.fn(() => '12345')
+      const scope = nock(API_ROOT)
+        .get('/')
+        .reply(401)
+      const expectedActions = [{
+        type: auth.UNAUTH_USER,
+      }]
+      const store = mockStore()
+
+      await store.dispatch(auth.fetchMessage())
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.getItem.mock.calls[0]).toEqual(['token'])
       expect(window.localStorage.removeItem.mock.calls[0]).toEqual(['token'])
     })
   })
