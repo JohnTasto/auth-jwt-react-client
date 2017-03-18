@@ -7,8 +7,6 @@ import nock from 'nock'
 import httpAdapter from 'axios/lib/adapters/http'
 import axios from 'axios'
 
-import { browserHistory } from 'react-router'
-
 import '../../tools/setTestApiRoot'
 import * as auth from './auth'
 
@@ -30,7 +28,6 @@ describe('auth actions', () => {
       setItem: jest.fn(),
       removeItem: jest.fn(),
     }
-    browserHistory.push = jest.fn()
     nock.disableNetConnect()
   })
 
@@ -50,9 +47,18 @@ describe('auth actions', () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(200, { token })
-      const expectedActions = [{
-        type: auth.AUTH_USER,
-      }]
+      const expectedActions = [
+        {
+          type: auth.AUTH_USER,
+        },
+        {
+          payload: {
+            args: ['/feature'],
+            method: 'push',
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        },
+      ]
       const store = mockStore()
 
       await store.dispatch(auth.signInUser(user))
@@ -60,7 +66,6 @@ describe('auth actions', () => {
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
       expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
-      expect(browserHistory.push.mock.calls.length).toBe(1)
     })
 
     test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', async () => {
@@ -104,9 +109,18 @@ describe('auth actions', () => {
       const scope = nock(API_ROOT)
         .post('/signup', user)
         .reply(200, { token })
-      const expectedActions = [{
-        type: auth.AUTH_USER,
-      }]
+      const expectedActions = [
+        {
+          type: auth.AUTH_USER,
+        },
+        {
+          payload: {
+            args: ['/feature'],
+            method: 'push',
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        },
+      ]
       const store = mockStore()
 
       await store.dispatch(auth.signUpUser(user))
@@ -114,7 +128,6 @@ describe('auth actions', () => {
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
       expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
-      expect(browserHistory.push.mock.calls.length).toBe(1)
     })
 
     test('on unsucessful signUp: creates AUTH_ERROR - <server message>', async () => {

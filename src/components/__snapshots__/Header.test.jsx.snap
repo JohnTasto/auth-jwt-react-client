@@ -6,8 +6,7 @@ exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
 >
   <Link
     className="navbar-brand"
-    onlyActiveOnIndex={false}
-    style={Object {}}
+    replace={false}
     to="/"
   >
     Redux Auth
@@ -20,8 +19,7 @@ exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
     >
       <Link
         className="nav-link"
-        onlyActiveOnIndex={false}
-        style={Object {}}
+        replace={false}
         to="/signin"
       >
         Sign In
@@ -32,8 +30,7 @@ exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
     >
       <Link
         className="nav-link"
-        onlyActiveOnIndex={false}
-        style={Object {}}
+        replace={false}
         to="/signup"
       >
         Sign Up
@@ -49,8 +46,7 @@ exports[`<Header /> Renders signout link if authenticated 1`] = `
 >
   <Link
     className="navbar-brand"
-    onlyActiveOnIndex={false}
-    style={Object {}}
+    replace={false}
     to="/"
   >
     Redux Auth
@@ -63,8 +59,7 @@ exports[`<Header /> Renders signout link if authenticated 1`] = `
     >
       <Link
         className="nav-link"
-        onlyActiveOnIndex={false}
-        style={Object {}}
+        replace={false}
         to="/signout"
       >
         Sign Out

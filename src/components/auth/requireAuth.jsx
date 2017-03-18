@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { browserHistory as history } from 'react-router'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 export function requireAuth(path) {
   return ComposedComponent =>
@@ -8,11 +8,11 @@ export function requireAuth(path) {
     class extends Component {
 
       componentWillMount() {
-        if (!this.props.authenticated) history.push(path)
+        if (!this.props.authenticated) this.props.push(path)
       }
 
       componentWillUpdate(nextProps) {
-        if (!nextProps.authenticated) history.push(path)
+        if (!nextProps.authenticated) this.props.push(path)
       }
 
       render() {
@@ -27,5 +27,5 @@ export default path => ComposedComponent => {
     return { authenticated: state.auth.authenticated }
   }
 
-  return connect(mapStateToProps)(requireAuth(path)(ComposedComponent))
+  return connect(mapStateToProps, push)(requireAuth(path)(ComposedComponent))
 }

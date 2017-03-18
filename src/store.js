@@ -1,11 +1,17 @@
 import { createStore, compose, applyMiddleware } from 'redux'
-import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'  // eslint-disable-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
+import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'  // eslint-disable-line import/no-extraneous-dependencies
+import { routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 import rootReducer from './ducks'
 
 
-function storeProd(initialState) {
+export const history = createHistory()
+
+
+function createStoreProd(initialState) {
   const middlewares = [
+    routerMiddleware(history),
     thunk,
   ]
 
@@ -15,11 +21,15 @@ function storeProd(initialState) {
 }
 
 
-function storeDev(initialState) {
+function createStoreDev(initialState) {
   const middlewares = [
 
-    // Throw error when you mutate state inside a dispatch or between dispatches
+    // throw error when you mutate state inside a dispatch or between dispatches
     reduxImmutableStateInvariant(),
+
+    // dispatch navigation actions from anywhere
+    // store.dispatch(push('/foo'))
+    routerMiddleware(history),
 
     thunk,
   ]
@@ -32,6 +42,6 @@ function storeDev(initialState) {
 }
 
 
-const store = process.env.NODE_ENV === 'production' ? storeProd : storeDev
-
-export default store
+export default process.env.NODE_ENV === 'production'
+  ? createStoreProd
+  : createStoreDev

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { browserHistory } from 'react-router'
+import { push } from 'react-router-redux'
 
 export const AUTH_USER = 'auth_user'
 export const UNAUTH_USER = 'unauth_user'
@@ -21,7 +21,7 @@ export function signInUser({ email, password }) {
       .then(response => {
         dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
-        browserHistory.push('/feature')
+        dispatch(push('/feature'))
       })
       .catch(error => {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
@@ -39,7 +39,7 @@ export function signUpUser({ email, password }) {
       .then(response => {
         dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
-        browserHistory.push('/feature')
+        dispatch(push('/feature'))
       })
       .catch(error => {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
