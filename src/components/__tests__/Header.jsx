@@ -3,7 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import { Header } from './Header'
+import { Header } from '../Header'
 
 describe('<Header />', () => {
   test('Renders signin/signup links if not authenticated', () => {

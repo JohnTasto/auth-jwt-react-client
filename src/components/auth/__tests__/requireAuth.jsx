@@ -3,7 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { requireAuth } from './requireAuth'
+import { requireAuth } from '../requireAuth'
 
 
 describe('HOC requireAuth()', () => {

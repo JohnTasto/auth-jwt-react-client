@@ -3,7 +3,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
-import Welcome from './Welcome'
+import Welcome from '../Welcome'
 
 describe('<Welcome />', () => {
   test('Renders correctly', () => {

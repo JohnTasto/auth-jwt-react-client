@@ -5,8 +5,8 @@ import { Provider } from 'react-redux'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import createStore from '../../store'
-import SignOut, { SignOut as SignOutComp } from './SignOut'
+import createStore from '../../../store'
+import SignOut, { SignOut as SignOutComp } from '../SignOut'
 
 describe('<SignOut />', () => {
   test('Calls action signOutUser before mount', () => {

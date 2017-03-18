@@ -19,6 +19,7 @@ rules:
   import/no-extraneous-dependencies:
     - 2
     - devDependencies:
+      - "**/__tests__/*.js?(x)"
       - "**/*.test.js?(x)"
       - "**/*.spec.js?(x)"
       optionalDependencies: false

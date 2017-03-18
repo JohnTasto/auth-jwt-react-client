@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
-import { Feature } from './Feature'
+import { Feature } from '../Feature'
 
 describe('<Feature />', () => {
   const props = {

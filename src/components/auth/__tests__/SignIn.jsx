@@ -5,20 +5,19 @@ import { Provider } from 'react-redux'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import createStore from '../../store'
-import SignUp, { SignUp as SignUpComp } from './SignUp'
+import createStore from '../../../store'
+import SignIn, { SignIn as SignInComp } from '../SignIn'
 
 
-describe('<SignUp />', () => {
+describe('<SignOut />', () => {
   test('Renders correctly', () => {
-    const wrapper = shallow(<SignUpComp handleSubmit={jest.fn()} />)
+    const wrapper = shallow(<SignInComp handleSubmit={jest.fn()} />)
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   describe('Integration', () => {
     const emailError = 'input[name="email"] ~ .error'
     const passwordError = 'input[name="password"] ~ .error'
-    const passwordConfirmError = 'input[name="passwordConfirm"] ~ .error'
 
     let wrapper
     let props
@@ -26,46 +25,42 @@ describe('<SignUp />', () => {
 
     beforeEach(() => {
       props = {
-        signUpUser: jest.fn(),
+        signInUser: jest.fn(),
       }
       wrapper = mount(
         <Provider store={createStore()}>
-          <SignUp {...props} />
+          <SignIn {...props} />
         </Provider>,
       )
       submitButton = wrapper.find('[action="submit"]')
     })
 
 
-    test('Calls action signUpUser with specified email and password', () => {
+    test('Calls action signInUser with specified email and password', () => {
       const user = {
         email: 'e@m.ail',
-        password: 'Password1',
-        passwordConfirm: 'Password1',
+        password: 'password',
       }
 
       // should have no errors, submit button disabled
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
-      expect(wrapper.find(passwordConfirmError).length).toBe(0)
       expect(submitButton.props().disabled).toBe(true)
 
       // simulate valid form fill
       wrapper.find('[name="email"]').simulate('change', { target: { value: user.email } })
       wrapper.find('[name="password"]').simulate('change', { target: { value: user.password } })
-      wrapper.find('[name="passwordConfirm"]').simulate('change', { target: { value: user.passwordConfirm } })
 
       // should still have no errors, submit button enabled
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
-      expect(wrapper.find(passwordConfirmError).length).toBe(0)
       expect(submitButton.props().disabled).toBe(false)
 
       // simulate form submit
       wrapper.find('form').simulate('submit')
 
       // verify result
-      expect(props.signUpUser.mock.calls[0][0]).toEqual(user)
+      expect(props.signInUser.mock.calls[0][0]).toEqual(user)
     })
 
 
@@ -74,18 +69,15 @@ describe('<SignUp />', () => {
       // should have no errors
       expect(wrapper.find(emailError).length).toBe(0)
       expect(wrapper.find(passwordError).length).toBe(0)
-      expect(wrapper.find(passwordConfirmError).length).toBe(0)
       expect(submitButton.props().disabled).toBe(true)
 
       // simulate empty form fill
       wrapper.find('input[name="email"]').simulate('blur')
       wrapper.find('input[name="password"]').simulate('blur')
-      wrapper.find('input[name="passwordConfirm"]').simulate('blur')
 
       // should now have errors
       expect(wrapper.find(emailError).length).toBe(1)
       expect(wrapper.find(passwordError).length).toBe(1)
-      expect(wrapper.find(passwordConfirmError).length).toBe(1)
       expect(submitButton.props().disabled).toBe(true)
     })
 
@@ -103,43 +95,6 @@ describe('<SignUp />', () => {
 
       // should now have error
       expect(wrapper.find(emailError).length).toBe(1)
-      expect(submitButton.props().disabled).toBe(true)
-    })
-
-
-    test('Displays error on malformed password', () => {
-
-      // should have no error
-      expect(wrapper.find(passwordError).length).toBe(0)
-      expect(submitButton.props().disabled).toBe(true)
-
-      // simulate entering malformed password
-      wrapper.find('input[name="password"]')
-        .simulate('change', { target: { value: 'password' } })
-        .simulate('blur')
-
-      // should now have error
-      expect(wrapper.find(passwordError).length).toBe(1)
-      expect(submitButton.props().disabled).toBe(true)
-    })
-
-
-    test('Displays error if passwords do not match', () => {
-
-      // should have no error
-      expect(wrapper.find(passwordConfirmError).length).toBe(0)
-      expect(submitButton.props().disabled).toBe(true)
-
-      // simulate entering valid, but non-matching passwords
-      wrapper.find('input[name="password"]')
-        .simulate('change', { target: { value: 'Password1' } })
-        .simulate('blur')
-      wrapper.find('input[name="passwordConfirm"]')
-        .simulate('change', { target: { value: 'Password2' } })
-        .simulate('blur')
-
-      // should now have error
-      expect(wrapper.find(passwordConfirmError).length).toBe(1)
       expect(submitButton.props().disabled).toBe(true)
     })
   })
