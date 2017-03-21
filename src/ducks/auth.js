@@ -18,7 +18,7 @@ export function authError(error) {
 export function setAuthRedirect(location) {
   return {
     type: SET_AUTH_REDIRECT,
-    location,
+    payload: location,
   }
 }
 
@@ -82,18 +82,18 @@ export function fetchMessage() {
 }
 
 
-export default function (state = {}, action) {
-  switch (action.type) {  // eslint-disable-line default-case
+export default function (state = {}, { type, payload }) {
+  switch (type) {  // eslint-disable-line default-case
     case AUTH_USER:
       return { ...state, error: '', authenticated: true }
     case UNAUTH_USER:
       return { ...state, authenticated: false }
     case AUTH_ERROR:
-      return { ...state, error: action.payload }
+      return { ...state, error: payload }
     case SET_AUTH_REDIRECT:
-      return { ...state, redirectLocation: action.location }
+      return { ...state, redirectLocation: payload }
     case FETCH_MESSAGE:
-      return { ...state, message: action.payload }
+      return { ...state, message: payload }
   }
 
   return state
