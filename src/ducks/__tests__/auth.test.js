@@ -7,8 +7,8 @@ import nock from 'nock'
 import httpAdapter from 'axios/lib/adapters/http'
 import axios from 'axios'
 
-import '../../tools/setTestApiRoot'
-import * as auth from './auth'
+import '../../../tools/setTestApiRoot'
+import * as auth from '../auth'
 
 
 const mockStore = configureMockStore([thunk])
@@ -42,23 +42,14 @@ describe('auth actions', () => {
       password: 'password',
     }
 
-    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage, and redirects', async () => {
+    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(200, { token })
-      const expectedActions = [
-        {
-          type: auth.AUTH_USER,
-        },
-        {
-          payload: {
-            args: ['/feature'],
-            method: 'push',
-          },
-          type: '@@router/CALL_HISTORY_METHOD',
-        },
-      ]
+      const expectedActions = [{
+        type: auth.AUTH_USER,
+      }]
       const store = mockStore()
 
       await store.dispatch(auth.signInUser(user))
@@ -104,23 +95,14 @@ describe('auth actions', () => {
       password: 'password',
     }
 
-    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage, and redirects', async () => {
+    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signup', user)
         .reply(200, { token })
-      const expectedActions = [
-        {
-          type: auth.AUTH_USER,
-        },
-        {
-          payload: {
-            args: ['/feature'],
-            method: 'push',
-          },
-          type: '@@router/CALL_HISTORY_METHOD',
-        },
-      ]
+      const expectedActions = [{
+        type: auth.AUTH_USER,
+      }]
       const store = mockStore()
 
       await store.dispatch(auth.signUpUser(user))

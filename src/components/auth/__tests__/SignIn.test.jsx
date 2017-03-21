@@ -1,6 +1,8 @@
 /* eslint-env jest */
+/* eslint-disable comma-dangle */
 
 import React from 'react'
+import { StaticRouter, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
@@ -9,11 +11,31 @@ import createStore from '../../../store'
 import SignIn, { SignIn as SignInComp } from '../SignIn'
 
 
-describe('<SignOut />', () => {
-  test('Renders correctly', () => {
-    const wrapper = shallow(<SignInComp handleSubmit={jest.fn()} />)
+describe('<SignIn />', () => {
+
+  test('Renders form if not authenticated', () => {
+    const wrapper = shallow(
+      <SignInComp
+        handleSubmit={jest.fn()}
+        setAuthRedirect={jest.fn()}
+        location={{}}
+      />
+    )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
+
+  test('Renders sign out button if authenticated', () => {
+    const wrapper = shallow(
+      <SignInComp
+        authenticated
+        handleSubmit={jest.fn()}
+        setAuthRedirect={jest.fn()}
+        location={{}}
+      />
+    )
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
 
   describe('Integration', () => {
     const emailError = 'input[name="email"] ~ .error'
@@ -29,7 +51,12 @@ describe('<SignOut />', () => {
       }
       wrapper = mount(
         <Provider store={createStore()}>
-          <SignIn {...props} />
+          <StaticRouter location="/signin" context={{}} >
+            <Route
+              path="/signin"
+              render={routeProps => (<SignIn {...routeProps} {...props} />)}
+            />
+          </StaticRouter>
         </Provider>,
       )
       submitButton = wrapper.find('[action="submit"]')

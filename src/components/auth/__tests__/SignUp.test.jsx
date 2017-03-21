@@ -1,6 +1,8 @@
 /* eslint-env jest */
+/* eslint-disable comma-dangle */
 
 import React from 'react'
+import { StaticRouter, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { shallow, mount } from 'enzyme'
 import toJson from 'enzyme-to-json'
@@ -10,10 +12,30 @@ import SignUp, { SignUp as SignUpComp } from '../SignUp'
 
 
 describe('<SignUp />', () => {
-  test('Renders correctly', () => {
-    const wrapper = shallow(<SignUpComp handleSubmit={jest.fn()} />)
+
+  test('Renders form if not authenticated', () => {
+    const wrapper = shallow(
+      <SignUpComp
+        handleSubmit={jest.fn()}
+        setAuthRedirect={jest.fn()}
+        location={{}}
+      />
+    )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
+
+  test('Renders sign out button if authenticated', () => {
+    const wrapper = shallow(
+      <SignUpComp
+        authenticated
+        handleSubmit={jest.fn()}
+        setAuthRedirect={jest.fn()}
+        location={{}}
+      />
+    )
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
 
   describe('Integration', () => {
     const emailError = 'input[name="email"] ~ .error'
@@ -30,8 +52,13 @@ describe('<SignUp />', () => {
       }
       wrapper = mount(
         <Provider store={createStore()}>
-          <SignUp {...props} />
-        </Provider>,
+          <StaticRouter location="/signup" context={{}} >
+            <Route
+              path="/signup"
+              render={routeProps => (<SignUp {...routeProps} {...props} />)}
+            />
+          </StaticRouter>
+        </Provider>
       )
       submitButton = wrapper.find('[action="submit"]')
     })

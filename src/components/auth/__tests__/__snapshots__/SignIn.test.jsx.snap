@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SignOut /> Renders correctly 1`] = `
+exports[`<SignIn /> Renders form if not authenticated 1`] = `
 <form>
   <Field
     component={[Function]}
@@ -28,4 +28,15 @@ exports[`<SignOut /> Renders correctly 1`] = `
     Sign in
   </button>
 </form>
+`;
+
+exports[`<SignIn /> Renders sign out button if authenticated 1`] = `
+<div>
+  <p>
+    You are already signed in.
+  </p>
+  <button>
+    Sign Out
+  </button>
+</div>
 `;

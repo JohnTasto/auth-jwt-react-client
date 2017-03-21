@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { push } from 'react-router-redux'
 
 export const AUTH_USER = 'auth_user'
 export const UNAUTH_USER = 'unauth_user'
 export const AUTH_ERROR = 'auth_error'
+export const SET_AUTH_REDIRECT = 'set_auth_redirect'
 export const FETCH_MESSAGE = 'fetch_message'
 
 const API_ROOT = process.env.API_ROOT
@@ -15,13 +15,19 @@ export function authError(error) {
   }
 }
 
+export function setAuthRedirect(location) {
+  return {
+    type: SET_AUTH_REDIRECT,
+    location,
+  }
+}
+
 export function signInUser({ email, password }) {
   return function signInUserThunk(dispatch) {
     return axios.post(`${API_ROOT}/signin`, { email, password })
       .then(response => {
-        dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
-        dispatch(push('/feature'))
+        dispatch({ type: AUTH_USER })
       })
       .catch(error => {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
@@ -37,9 +43,8 @@ export function signUpUser({ email, password }) {
   return function signUpUserThunk(dispatch) {
     return axios.post(`${API_ROOT}/signup`, { email, password })
       .then(response => {
-        dispatch({ type: AUTH_USER })
         localStorage.setItem('token', response.data.token)
-        dispatch(push('/feature'))
+        dispatch({ type: AUTH_USER })
       })
       .catch(error => {
         if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
@@ -85,6 +90,8 @@ export default function (state = {}, action) {
       return { ...state, authenticated: false }
     case AUTH_ERROR:
       return { ...state, error: action.payload }
+    case SET_AUTH_REDIRECT:
+      return { ...state, redirectLocation: action.location }
     case FETCH_MESSAGE:
       return { ...state, message: action.payload }
   }

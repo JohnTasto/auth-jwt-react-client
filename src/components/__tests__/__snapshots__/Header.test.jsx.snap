@@ -20,6 +20,17 @@ exports[`<Header /> Renders signin/signup links if not authenticated 1`] = `
       <Link
         className="nav-link"
         replace={false}
+        to="/feature"
+      >
+        Feature
+      </Link>
+    </li>
+    <li
+      className="nav-item"
+    >
+      <Link
+        className="nav-link"
+        replace={false}
         to="/signin"
       >
         Sign In
@@ -54,6 +65,17 @@ exports[`<Header /> Renders signout link if authenticated 1`] = `
   <ul
     className="nav navbar-nav"
   >
+    <li
+      className="nav-item"
+    >
+      <Link
+        className="nav-link"
+        replace={false}
+        to="/feature"
+      >
+        Feature
+      </Link>
+    </li>
     <li
       className="nav-item"
     >

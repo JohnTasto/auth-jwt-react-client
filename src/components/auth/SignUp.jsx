@@ -24,6 +24,25 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 }
 
 export class SignUp extends Component {
+  componentWillMount() {
+    const { location, redirectLocation, setAuthRedirect } = this.props
+    if (!redirectLocation) {
+      if (location.state && location.state.from) {
+        setAuthRedirect(location.state.from)
+      } else {
+        setAuthRedirect({ pathname: '/' })
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { authenticated, submitSucceeded, history, redirectLocation } = nextProps
+    if (submitSucceeded && authenticated && redirectLocation) {
+      history.push(redirectLocation)
+      this.props.setAuthRedirect(undefined)
+    }
+  }
+
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -36,7 +55,16 @@ export class SignUp extends Component {
   }
 
   render() {
-    const { handleSubmit, invalid, submitting } = this.props
+    const { authenticated, handleSubmit, invalid, submitting } = this.props
+
+    if (authenticated) {
+      return (
+        <div>
+          <p>You are already signed in.</p>
+          <button onClick={this.props.signOutUser}>Sign Out</button>
+        </div>
+      )
+    }
 
     return (
       <form onSubmit={handleSubmit(this.props.signUpUser)}>
@@ -82,7 +110,9 @@ function validate(values) {
 
 export default connect(
   state => ({
+    authenticated: state.auth.authenticated,
     errorMessage: state.auth.error,
+    redirectLocation: state.auth.redirectLocation,
   }),
   actions,
   (...props) =>

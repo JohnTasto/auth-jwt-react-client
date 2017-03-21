@@ -27,6 +27,9 @@ export class Header extends Component {
       <nav className="navbar navbar-light">
         <Link to="/" className="navbar-brand">Redux Auth</Link>
         <ul className="nav navbar-nav">
+          <li className="nav-item">
+            <Link className="nav-link" to="/feature">Feature</Link>
+          </li>
           {this.renderLinks()}
         </ul>
       </nav>

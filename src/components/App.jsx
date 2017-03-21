@@ -6,7 +6,7 @@ import Signin from './auth/SignIn'
 import Signout from './auth/SignOut'
 import Signup from './auth/SignUp'
 import Feature from './Feature'
-import RequireAuth from './auth/requireAuth'
+import PrivateRoute from './auth/PrivateRoute'
 import Welcome from './Welcome'
 
 export default function App() {
@@ -17,7 +17,7 @@ export default function App() {
       <Route path="/signin" component={Signin} />
       <Route path="/signout" component={Signout} />
       <Route path="/signup" component={Signup} />
-      <Route path="/feature" component={RequireAuth('/signin')(Feature)} />
+      <PrivateRoute path="/feature" component={Feature} signInPath="/signin" />
     </div>
   )
 }
