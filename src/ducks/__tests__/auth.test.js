@@ -164,9 +164,9 @@ describe('auth actions', () => {
       const message = 'Hey'
       window.localStorage.getItem = jest.fn(() => token)
       const scope = nock(API_ROOT, {
-        reqheaders: { authorization: token },
+        reqheaders: { authorization: `Bearer ${token}` },
       })
-        .get('/')
+        .get('/feature')
         .reply(200, { message })
       const expectedActions = [{
         type: auth.FETCH_MESSAGE,
@@ -184,7 +184,7 @@ describe('auth actions', () => {
     test('on unsucessful fetch: creates UNAUTH_USER, removes token from localStorage', async () => {
       window.localStorage.getItem = jest.fn(() => '12345')
       const scope = nock(API_ROOT)
-        .get('/')
+        .get('/feature')
         .reply(401)
       const expectedActions = [{
         type: auth.UNAUTH_USER,

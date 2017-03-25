@@ -3,6 +3,7 @@ import axios from 'axios'
 export const AUTH_USER = 'auth_user'
 export const UNAUTH_USER = 'unauth_user'
 export const AUTH_ERROR = 'auth_error'
+export const AUTH_CLEAR_ERROR = 'auth_clear_error'
 export const SET_AUTH_REDIRECT = 'set_auth_redirect'
 export const FETCH_MESSAGE = 'fetch_message'
 
@@ -63,8 +64,8 @@ export function signOutUser() {
 
 export function fetchMessage() {
   return function fetchMessageThunk(dispatch) {
-    return axios.get(API_ROOT, {
-      headers: { authorization: localStorage.getItem('token') },
+    return axios.get(`${API_ROOT}/feature`, {
+      headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
     })
       .then(response => {
         dispatch({
