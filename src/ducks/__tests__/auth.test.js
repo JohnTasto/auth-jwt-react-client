@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-disable no-underscore-dangle */
 
 import 'babel-polyfill'
 import configureMockStore from 'redux-mock-store'
@@ -6,6 +7,7 @@ import thunk from 'redux-thunk'
 import nock from 'nock'
 import httpAdapter from 'axios/lib/adapters/http'
 import axios from 'axios'
+import { SubmissionError } from 'redux-form'
 
 import '../../../tools/setTestApiRoot'
 import * as auth from '../auth'
@@ -61,32 +63,34 @@ describe('auth actions', () => {
     })
 
     test('on unsucessful signUp: creates AUTH_ERROR - <server message>', async () => {
-      const error = 'ERROR!'
+      const errorMessage = 'ERROR!'
       const scope = nock(API_ROOT)
         .post('/signup', user)
-        .reply(422, { error })
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: error,
-      }]
+        .reply(422, { errorMessage })
       const store = mockStore()
 
-      await store.dispatch(auth.signUpUser(user))
+      const signInUserPromise = store.dispatch(auth.signUpUser(user))
 
+      // TODO: replace with expect().rejects in Jest 20+
+      await signInUserPromise.catch(error => {
+        expect(error).toBeInstanceOf(SubmissionError)
+        expect(error.errors._error).toEqual(errorMessage)
+      })
       expect(scope.isDone()).toBe(true)
-      expect(store.getActions()).toEqual(expectedActions)
+      expect(store.getActions()).toEqual([])
     })
 
     test('on any other error: creates AUTH_ERROR - Network error', async () => {
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: 'Network error',
-      }]
       const store = mockStore()
 
-      await store.dispatch(auth.signUpUser(user))
+      const signInUserPromise = store.dispatch(auth.signUpUser(user))
 
-      expect(store.getActions()).toEqual(expectedActions)
+      // TODO: replace with expect().rejects in Jest 20+
+      await signInUserPromise.catch(error => {
+        expect(error).toBeInstanceOf(SubmissionError)
+        expect(error.errors._error).toEqual('Network error')
+      })
+      expect(store.getActions()).toEqual([])
     })
   })
 
@@ -118,28 +122,30 @@ describe('auth actions', () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(401)
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: 'Invalid credentials',
-      }]
       const store = mockStore()
 
-      await store.dispatch(auth.signInUser(user))
+      const signInUserPromise = store.dispatch(auth.signInUser(user))
 
+      // TODO: replace with expect().rejects in Jest 20+
+      await signInUserPromise.catch(error => {
+        expect(error).toBeInstanceOf(SubmissionError)
+        expect(error.errors._error).toEqual('Invalid credentials')
+      })
       expect(scope.isDone()).toBe(true)
-      expect(store.getActions()).toEqual(expectedActions)
+      expect(store.getActions()).toEqual([])
     })
 
     test('on any other error: creates AUTH_ERROR - Network error', async () => {
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: 'Network error',
-      }]
       const store = mockStore()
 
-      await store.dispatch(auth.signInUser(user))
+      const signInUserPromise = store.dispatch(auth.signInUser(user))
 
-      expect(store.getActions()).toEqual(expectedActions)
+      // TODO: replace with expect().rejects in Jest 20+
+      await signInUserPromise.catch(error => {
+        expect(error).toBeInstanceOf(SubmissionError)
+        expect(error.errors._error).toEqual('Network error')
+      })
+      expect(store.getActions()).toEqual([])
     })
   })
 

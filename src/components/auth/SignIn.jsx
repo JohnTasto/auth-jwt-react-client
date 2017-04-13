@@ -39,10 +39,10 @@ export class SignIn extends Component {
   }
 
   renderAlert() {
-    if (this.props.errorMessage) {
+    if (this.props.error) {
       return (
         <div className="alert alert-danger">
-          <strong>Error:</strong> {this.props.errorMessage}
+          <strong>Error:</strong> {this.props.error}
         </div>
       )
     }
