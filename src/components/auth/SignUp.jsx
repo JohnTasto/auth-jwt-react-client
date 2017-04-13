@@ -61,13 +61,13 @@ export class SignUp extends Component {
       return (
         <div>
           <p>You are already signed in.</p>
-          <button onClick={this.props.signOutUser}>Sign Out</button>
+          <button onClick={this.props.signOut}>Sign Out</button>
         </div>
       )
     }
 
     return (
-      <form onSubmit={handleSubmit(this.props.signUpUser)}>
+      <form onSubmit={handleSubmit(this.props.signUp)}>
         <Field
           name="email"
           type="email"

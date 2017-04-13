@@ -5,12 +5,11 @@ import { SubmissionError } from 'redux-form'
 const API_ROOT = process.env.API_ROOT
 
 
-export const AUTH_USER = 'auth_user'
-export const UNAUTH_USER = 'unauth_user'
-export const AUTH_ERROR = 'auth_error'
-export const AUTH_CLEAR_ERROR = 'auth_clear_error'
-export const SET_AUTH_REDIRECT = 'set_auth_redirect'
-export const FETCH_MESSAGE = 'fetch_message'
+export const AUTH = 'auth'
+export const UNAUTH = 'unauth'
+export const SET_AUTH_REDIRECT = 'set auth redirect'
+
+export const FETCH_MESSAGE = 'fetch message'
 
 
 export const setAuthRedirect = location => ({
@@ -18,11 +17,11 @@ export const setAuthRedirect = location => ({
   payload: location,
 })
 
-export const signUpUser = ({ email, password }) => dispatch =>
+export const signUp = ({ email, password }) => dispatch =>
   axios.post(`${API_ROOT}/signup`, { email, password })
     .then(response => {
       localStorage.setItem('token', response.data.token)
-      dispatch({ type: AUTH_USER })
+      dispatch({ type: AUTH })
     })
     .catch(error => {
       if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
@@ -32,11 +31,11 @@ export const signUpUser = ({ email, password }) => dispatch =>
       throw new SubmissionError({ _error: message })
     })
 
-export const signInUser = ({ email, password }) => dispatch =>
+export const signIn = ({ email, password }) => dispatch =>
   axios.post(`${API_ROOT}/signin`, { email, password })
     .then(response => {
       localStorage.setItem('token', response.data.token)
-      dispatch({ type: AUTH_USER })
+      dispatch({ type: AUTH })
     })
     .catch(error => {
       if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
@@ -46,9 +45,9 @@ export const signInUser = ({ email, password }) => dispatch =>
       throw new SubmissionError({ _error: message })
     })
 
-export const signOutUser = () => {
+export const signOut = () => {
   localStorage.removeItem('token')
-  return { type: UNAUTH_USER }
+  return { type: UNAUTH }
 }
 
 export const fetchMessage = () => dispatch =>
@@ -64,16 +63,16 @@ export const fetchMessage = () => dispatch =>
     .catch(error => {
       if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
       if (error.response && error.response.status === 401) {
-        dispatch(signOutUser())
+        dispatch(signOut())
       }
     })
 
 
 export default (state = {}, { type, payload }) => {
   switch (type) {  // eslint-disable-line default-case
-    case AUTH_USER:
+    case AUTH:
       return { ...state, authenticated: true }
-    case UNAUTH_USER:
+    case UNAUTH:
       return { ...state, authenticated: false }
     case SET_AUTH_REDIRECT:
       return { ...state, redirectLocation: payload }

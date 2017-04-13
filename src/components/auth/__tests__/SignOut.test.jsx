@@ -9,20 +9,20 @@ import createStore from '../../../store'
 import SignOut, { SignOut as SignOutComp } from '../SignOut'
 
 describe('<SignOut />', () => {
-  test('Calls action signOutUser before mount', () => {
+  test('Calls action signOut before mount', () => {
     const props = {
-      signOutUser: jest.fn(),
+      signOut: jest.fn(),
     }
     mount(
       <Provider store={createStore()}>
         <SignOut {...props} />
       </Provider>,
     )
-    expect(props.signOutUser.mock.calls.length).toBe(1)
+    expect(props.signOut.mock.calls.length).toBe(1)
   })
 
   test('Renders a message', () => {
-    const wrapper = shallow(<SignOutComp signOutUser={jest.fn()} />)
+    const wrapper = shallow(<SignOutComp signOut={jest.fn()} />)
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 })

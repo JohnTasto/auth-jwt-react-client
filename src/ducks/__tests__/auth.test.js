@@ -39,40 +39,40 @@ describe('auth actions', () => {
   })
 
 
-  describe('signUpUser()', () => {
+  describe('signUp()', () => {
     const user = {
       email: 'email',
       password: 'password',
     }
 
-    test('on sucessful signUp: creates AUTH_USER, sets token in localStorage', async () => {
+    test('on sucessful signUp: creates AUTH, sets token in localStorage', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signup', user)
         .reply(200, { token })
       const expectedActions = [{
-        type: auth.AUTH_USER,
+        type: auth.AUTH,
       }]
       const store = mockStore()
 
-      await store.dispatch(auth.signUpUser(user))
+      await store.dispatch(auth.signUp(user))
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
       expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
     })
 
-    test('on unsucessful signUp: creates AUTH_ERROR - <server message>', async () => {
+    test('on unsucessful signUp: throws SubmissionError("<server message>")', async () => {
       const errorMessage = 'ERROR!'
       const scope = nock(API_ROOT)
         .post('/signup', user)
         .reply(422, { errorMessage })
       const store = mockStore()
 
-      const signInUserPromise = store.dispatch(auth.signUpUser(user))
+      const signUpPromise = store.dispatch(auth.signUp(user))
 
       // TODO: replace with expect().rejects in Jest 20+
-      await signInUserPromise.catch(error => {
+      await signUpPromise.catch(error => {
         expect(error).toBeInstanceOf(SubmissionError)
         expect(error.errors._error).toEqual(errorMessage)
       })
@@ -80,13 +80,13 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([])
     })
 
-    test('on any other error: creates AUTH_ERROR - Network error', async () => {
+    test('on any other error: throws SubmissionError("Network error")', async () => {
       const store = mockStore()
 
-      const signInUserPromise = store.dispatch(auth.signUpUser(user))
+      const signUpPromise = store.dispatch(auth.signUp(user))
 
       // TODO: replace with expect().rejects in Jest 20+
-      await signInUserPromise.catch(error => {
+      await signUpPromise.catch(error => {
         expect(error).toBeInstanceOf(SubmissionError)
         expect(error.errors._error).toEqual('Network error')
       })
@@ -95,39 +95,39 @@ describe('auth actions', () => {
   })
 
 
-  describe('signInUser()', () => {
+  describe('signIn()', () => {
     const user = {
       email: 'email',
       password: 'password',
     }
 
-    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage', async () => {
+    test('on sucessful signIn: creates AUTH, sets token in localStorage', async () => {
       const token = '12345'
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(200, { token })
       const expectedActions = [{
-        type: auth.AUTH_USER,
+        type: auth.AUTH,
       }]
       const store = mockStore()
 
-      await store.dispatch(auth.signInUser(user))
+      await store.dispatch(auth.signIn(user))
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
       expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
     })
 
-    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', async () => {
+    test('on unsucessful signIn: throws SubmissionError("Invalid credentials")', async () => {
       const scope = nock(API_ROOT)
         .post('/signin', user)
         .reply(401)
       const store = mockStore()
 
-      const signInUserPromise = store.dispatch(auth.signInUser(user))
+      const signInPromise = store.dispatch(auth.signIn(user))
 
       // TODO: replace with expect().rejects in Jest 20+
-      await signInUserPromise.catch(error => {
+      await signInPromise.catch(error => {
         expect(error).toBeInstanceOf(SubmissionError)
         expect(error.errors._error).toEqual('Invalid credentials')
       })
@@ -135,13 +135,13 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([])
     })
 
-    test('on any other error: creates AUTH_ERROR - Network error', async () => {
+    test('on any other error: throws SubmissionError("Network error")', async () => {
       const store = mockStore()
 
-      const signInUserPromise = store.dispatch(auth.signInUser(user))
+      const signInPromise = store.dispatch(auth.signIn(user))
 
       // TODO: replace with expect().rejects in Jest 20+
-      await signInUserPromise.catch(error => {
+      await signInPromise.catch(error => {
         expect(error).toBeInstanceOf(SubmissionError)
         expect(error.errors._error).toEqual('Network error')
       })
@@ -150,14 +150,14 @@ describe('auth actions', () => {
   })
 
 
-  describe('signOutUser()', () => {
-    test('on signOut: creates UNAUTH_USER, removes token from localStorage', () => {
+  describe('signOut()', () => {
+    test('on signOut: creates UNAUTH, removes token from localStorage', () => {
       const expectedActions = [{
-        type: auth.UNAUTH_USER,
+        type: auth.UNAUTH,
       }]
       const store = mockStore()
 
-      store.dispatch(auth.signOutUser())
+      store.dispatch(auth.signOut())
 
       expect(store.getActions()).toEqual(expectedActions)
       expect(window.localStorage.removeItem.mock.calls[0]).toEqual(['token'])
@@ -188,13 +188,13 @@ describe('auth actions', () => {
       expect(window.localStorage.getItem.mock.calls[0]).toEqual(['token'])
     })
 
-    test('on unsucessful fetch: creates UNAUTH_USER, removes token from localStorage', async () => {
+    test('on unsucessful fetch: creates UNAUTH, removes token from localStorage', async () => {
       window.localStorage.getItem = jest.fn(() => '12345')
       const scope = nock(API_ROOT)
         .get('/feature')
         .reply(401)
       const expectedActions = [{
-        type: auth.UNAUTH_USER,
+        type: auth.UNAUTH,
       }]
       const store = mockStore()
 
