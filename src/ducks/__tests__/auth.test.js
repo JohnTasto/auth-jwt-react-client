@@ -36,58 +36,6 @@ describe('auth actions', () => {
     nock.enableNetConnect()
   })
 
-  describe('signInUser()', () => {
-    const user = {
-      email: 'email',
-      password: 'password',
-    }
-
-    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage', async () => {
-      const token = '12345'
-      const scope = nock(API_ROOT)
-        .post('/signin', user)
-        .reply(200, { token })
-      const expectedActions = [{
-        type: auth.AUTH_USER,
-      }]
-      const store = mockStore()
-
-      await store.dispatch(auth.signInUser(user))
-
-      expect(scope.isDone()).toBe(true)
-      expect(store.getActions()).toEqual(expectedActions)
-      expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
-    })
-
-    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', async () => {
-      const scope = nock(API_ROOT)
-        .post('/signin', user)
-        .reply(401)
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: 'Invalid credentials',
-      }]
-      const store = mockStore()
-
-      await store.dispatch(auth.signInUser(user))
-
-      expect(scope.isDone()).toBe(true)
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-
-    test('on any other error: creates AUTH_ERROR - Network error', async () => {
-      const expectedActions = [{
-        type: auth.AUTH_ERROR,
-        payload: 'Network error',
-      }]
-      const store = mockStore()
-
-      await store.dispatch(auth.signInUser(user))
-
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-  })
-
 
   describe('signUpUser()', () => {
     const user = {
@@ -137,6 +85,59 @@ describe('auth actions', () => {
       const store = mockStore()
 
       await store.dispatch(auth.signUpUser(user))
+
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+
+  describe('signInUser()', () => {
+    const user = {
+      email: 'email',
+      password: 'password',
+    }
+
+    test('on sucessful signIn: creates AUTH_USER, sets token in localStorage', async () => {
+      const token = '12345'
+      const scope = nock(API_ROOT)
+        .post('/signin', user)
+        .reply(200, { token })
+      const expectedActions = [{
+        type: auth.AUTH_USER,
+      }]
+      const store = mockStore()
+
+      await store.dispatch(auth.signInUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+      expect(window.localStorage.setItem.mock.calls[0]).toEqual(['token', token])
+    })
+
+    test('on unsucessful signIn: creates AUTH_ERROR - Invalid credentials', async () => {
+      const scope = nock(API_ROOT)
+        .post('/signin', user)
+        .reply(401)
+      const expectedActions = [{
+        type: auth.AUTH_ERROR,
+        payload: 'Invalid credentials',
+      }]
+      const store = mockStore()
+
+      await store.dispatch(auth.signInUser(user))
+
+      expect(scope.isDone()).toBe(true)
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+
+    test('on any other error: creates AUTH_ERROR - Network error', async () => {
+      const expectedActions = [{
+        type: auth.AUTH_ERROR,
+        payload: 'Network error',
+      }]
+      const store = mockStore()
+
+      await store.dispatch(auth.signInUser(user))
 
       expect(store.getActions()).toEqual(expectedActions)
     })
