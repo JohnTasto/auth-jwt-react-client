@@ -98,10 +98,10 @@ describe('auth actions', () => {
       const scope = nock(API_ROOT)
         .patch('/signin', user)
         .reply(200, { refreshToken, accessToken })
-      const expectedActions = [{
-        type: auth.AUTH,
-        payload: { refreshToken, accessToken },
-      }]
+      const expectedActions = [
+        { type: auth.AUTH, payload: { refreshToken } },
+        { type: auth.REFRESH, payload: { accessToken } },
+      ]
       const store = mockStore()
 
       await store.dispatch(auth.signIn(user))
@@ -168,10 +168,10 @@ describe('auth actions', () => {
       })
         .patch('/verifyemail')
         .reply(200, { refreshToken, accessToken })
-      const expectedActions = [{
-        type: auth.AUTH,
-        payload: { refreshToken, accessToken },
-      }]
+      const expectedActions = [
+        { type: auth.AUTH, payload: { refreshToken } },
+        { type: auth.REFRESH, payload: { accessToken } },
+      ]
       const store = mockStore()
 
       await store.dispatch(auth.verifyEmail(emailToken))
@@ -217,10 +217,10 @@ describe('auth actions', () => {
 
   describe('fetchMessage()', () => {
     test('on sucess: creates FETCH_MESSAGE', async () => {
-      const accessToken = '1337'
+      const token = '1337'
       const message = 'Hey'
       const scope = nock(API_ROOT, {
-        reqheaders: { authorization: `Bearer ${accessToken}` },
+        reqheaders: { authorization: `Bearer ${token}` },
       })
         .get('/feature')
         .reply(200, { message })
@@ -228,7 +228,7 @@ describe('auth actions', () => {
         type: auth.FETCH_MESSAGE,
         payload: message,
       }]
-      const store = mockStore({ auth: { accessToken } })
+      const store = mockStore({ auth: { access: { token } } })
 
       await store.dispatch(auth.fetchMessage())
 
@@ -237,14 +237,14 @@ describe('auth actions', () => {
     })
 
     test('on authentication error: creates UNAUTH', async () => {
-      const accessToken = '1337'
+      const token = '1337'
       const scope = nock(API_ROOT)
         .get('/feature')
         .reply(401)
       const expectedActions = [{
         type: auth.UNAUTH,
       }]
-      const store = mockStore({ auth: { accessToken } })
+      const store = mockStore({ auth: { access: { token } } })
 
       await store.dispatch(auth.fetchMessage())
 

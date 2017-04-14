@@ -10,7 +10,7 @@ const { resolve } = require('path')
 const VENDOR_LIBS = [
   'react', 'react-redux', 'react-dom', 'react-router-dom',
   'redux', 'redux-form', 'redux-thunk', 'react-router-redux',
-  'lodash',
+  'lodash', 'moment', 'jwt-simple',
 ]
 
 module.exports = env => {

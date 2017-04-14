@@ -1,4 +1,5 @@
 import axios from 'axios'
+import jwt from 'jwt-simple'
 import { SubmissionError } from 'redux-form'
 
 
@@ -22,14 +23,13 @@ const handleTokens = dispatch => response => {
   if (refreshToken) {
     dispatch({
       type: AUTH,
-      payload: { refreshToken, accessToken },
-    })
-  } else {
-    dispatch({
-      type: REFRESH,
       payload: { refreshToken },
     })
   }
+  dispatch({
+    type: REFRESH,
+    payload: { accessToken },
+  })
 }
 
 const handleErrors = error => {
@@ -53,6 +53,8 @@ const handleErrors = error => {
 }
 
 const decode = token => token.replace(/-/g, '.')
+
+const exp = token => jwt.decode(token, null, true).exp
 
 
 // ACTIONS
@@ -94,7 +96,7 @@ export const fetchMessage = () => (dispatch, getState) =>
   axios({
     method: 'get',
     url: `${API_ROOT}/feature`,
-    headers: { authorization: `Bearer ${getState().auth.accessToken}` },
+    headers: { authorization: `Bearer ${getState().auth.access.token}` },
   })
     .then(response => {
       dispatch({
@@ -118,20 +120,25 @@ export default (state = {}, { type, payload }) => {
       return {
         ...state,
         authenticated: true,
-        refreshToken: payload.refreshToken,
-        accessToken: payload.accessToken,
+        refresh: {
+          token: payload.refreshToken,
+          exp: exp(payload.refreshToken),
+        },
       }
     case UNAUTH:
       return {
         ...state,
         authenticated: false,
-        refreshToken: undefined,
-        accessToken: undefined,
+        refresh: undefined,
+        access: undefined,
       }
     case REFRESH:
       return {
         ...state,
-        accessToken: payload.accessToken,
+        access: {
+          token: payload.accessToken,
+          exp: exp(payload.accessToken),
+        },
       }
     case SET_AUTH_REDIRECT:
       return { ...state, redirectLocation: payload }
