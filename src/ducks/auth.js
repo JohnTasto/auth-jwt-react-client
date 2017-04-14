@@ -52,7 +52,7 @@ const handleErrors = error => {
   throw new SubmissionError({ _error: message })
 }
 
-const decode = token => token.replace(/-/g, '.')
+const decode = token => token.replace(/~/g, '.')
 
 const exp = token => jwt.decode(token, null, true).exp
 
@@ -81,7 +81,14 @@ export const signIn = ({ email, password }) => dispatch =>
     .then(handleTokens(dispatch))
     .catch(handleErrors)
 
-export const signOut = () => ({ type: UNAUTH })
+export const signOut = () => (dispatch, getState) =>
+  axios({
+    method: 'patch',
+    url: `${API_ROOT}/signout`,
+    headers: { authorization: `Bearer ${getState().auth.refresh.token}` },
+  })
+    .then(() => dispatch({ type: UNAUTH }))
+    .catch(() => dispatch({ type: UNAUTH }))
 
 export const verifyEmail = token => dispatch =>
   axios({
@@ -107,7 +114,7 @@ export const fetchMessage = () => (dispatch, getState) =>
     .catch(error => {
       if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
       if (error.response && error.response.status === 401) {
-        dispatch(signOut())
+        return dispatch(signOut())
       }
     })
 

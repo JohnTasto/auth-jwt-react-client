@@ -144,14 +144,21 @@ describe('auth actions', () => {
 
 
   describe('signOut()', () => {
-    test('on signOut: creates UNAUTH', () => {
+    test('on signOut: creates UNAUTH', async () => {
+      const token = '1337'
+      const scope = nock(API_ROOT, {
+        reqheaders: { authorization: `Bearer ${token}` },
+      })
+        .patch('/signout')
+        .reply(200)
       const expectedActions = [{
         type: auth.UNAUTH,
       }]
-      const store = mockStore()
+      const store = mockStore({ auth: { refresh: { token } } })
 
-      store.dispatch(auth.signOut())
+      await store.dispatch(auth.signOut())
 
+      expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
     })
   })
@@ -238,17 +245,23 @@ describe('auth actions', () => {
 
     test('on authentication error: creates UNAUTH', async () => {
       const token = '1337'
-      const scope = nock(API_ROOT)
+      const scopeFeature = nock(API_ROOT)
         .get('/feature')
         .reply(401)
+      const scopeSignOut = nock(API_ROOT, {
+        reqheaders: { authorization: `Bearer ${token}` },
+      })
+        .patch('/signout')
+        .reply(200)
       const expectedActions = [{
         type: auth.UNAUTH,
       }]
-      const store = mockStore({ auth: { access: { token } } })
+      const store = mockStore({ auth: { access: { token }, refresh: { token } } })
 
       await store.dispatch(auth.fetchMessage())
 
-      expect(scope.isDone()).toBe(true)
+      expect(scopeFeature.isDone()).toBe(true)
+      expect(scopeSignOut.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
     })
   })

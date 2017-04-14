@@ -56,7 +56,7 @@ export class VerifyEmail extends Component {
     if (error) {
       return (
         <div className="alert alert-danger">
-          <strong>Error:</strong>
+          <strong>Error:&nbsp;</strong>
           <span>{error}</span>
         </div>
       )

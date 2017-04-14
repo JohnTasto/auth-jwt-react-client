@@ -16,7 +16,7 @@ export default function App() {
       <Header />
       <Route path="/" exact component={Welcome} />
       <Route path="/signin" component={SignIn} />
-      <Route path="/signout" component={SignOut} />
+      <PrivateRoute path="/signout" component={SignOut} signInPath="/signin" />
       <Route path="/signup" component={SignUp} />
       <Route path="/verifyemail/:token" component={VerifyEmail} />
       <PrivateRoute path="/feature" component={Feature} signInPath="/signin" />
@@ -25,10 +25,8 @@ export default function App() {
 }
 
 // TODO:
-//   keep track of access token expiration
 //   get new access token when access token expires
 //   sign out when refresh token expires
-//   call /signout when signing out
 //   create <ResetPassword />
 //   modify <SignIn /> to show a link to reset password
 //   create protected <ChangePassword />
