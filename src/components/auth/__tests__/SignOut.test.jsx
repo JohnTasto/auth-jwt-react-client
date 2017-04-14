@@ -1,23 +1,17 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { Provider } from 'react-redux'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import createStore from '../../../store'
-import SignOut, { SignOut as SignOutComp } from '../SignOut'
+import { SignOut as SignOutComp } from '../SignOut'
 
 describe('<SignOut />', () => {
   test('Calls action signOut before mount', () => {
     const props = {
       signOut: jest.fn(),
     }
-    mount(
-      <Provider store={createStore()}>
-        <SignOut {...props} />
-      </Provider>,
-    )
+    shallow(<SignOutComp {...props} />)
     expect(props.signOut.mock.calls.length).toBe(1)
   })
 
