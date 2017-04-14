@@ -23,3 +23,12 @@ export default function App() {
     </div>
   )
 }
+
+// TODO:
+//   keep track of access token expiration
+//   get new access token when access token expires
+//   sign out when refresh token expires
+//   call /signout when signing out
+//   create <ResetPassword />
+//   modify <SignIn /> to show a link to reset password
+//   create protected <ChangePassword />

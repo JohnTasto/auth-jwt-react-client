@@ -18,7 +18,7 @@ export class VerifyEmail extends Component {
       this.setState({ preauthed: true })
     } else {
       verifyEmail(match.params.token)
-        .catch(error => this.setState({ error: error.errors._error }))  // eslint-disable-line no-underscore-dangle
+        .catch(error => this.setState({ error: error.errors._error }))  // eslint-disable-line no-underscore-dangle, max-len
     }
   }
 
