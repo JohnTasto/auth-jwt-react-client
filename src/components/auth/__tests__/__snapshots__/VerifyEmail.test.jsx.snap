@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VerifyEmail /> Renders error on error 1`] = `
+<div
+  className="alert alert-danger"
+>
+  <strong>
+    Error:
+  </strong>
+  <span>
+    ERROR!
+  </span>
+</div>
+`;
+
+exports[`<VerifyEmail /> Renders message indicating email has already been verified if authenticated 1`] = `
+<div>
+  <p>
+    Your email has already been verified.
+  </p>
+</div>
+`;
+
+exports[`<VerifyEmail /> Renders message indicating email verification is in progress 1`] = `
+<div>
+  <p>
+    Verifying your email....
+  </p>
+</div>
+`;
+
+exports[`<VerifyEmail /> Renders redirect message if authentication state changes to true 1`] = `
+<div>
+  <p>
+    Success! Redirecting in five....
+  </p>
+</div>
+`;

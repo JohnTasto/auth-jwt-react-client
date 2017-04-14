@@ -25,6 +25,7 @@ module.exports = env => {
       path: resolve('dist'),
       filename: '[name].[chunkhash].js',
       pathinfo: ifNotProd(),
+      publicPath: '/',
     },
     devtool: env.prod ? 'source-map' : 'eval',
     module: {
@@ -81,7 +82,7 @@ module.exports = env => {
     },
     devServer: {
       historyApiFallback: true,
-      contentBase: './',
+      // contentBase: './',
       // quiet: true,
     },
   }

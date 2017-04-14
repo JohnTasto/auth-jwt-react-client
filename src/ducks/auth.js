@@ -5,54 +5,96 @@ import { SubmissionError } from 'redux-form'
 const API_ROOT = process.env.API_ROOT
 
 
+// TYPES
+
 export const AUTH = 'auth'
 export const UNAUTH = 'unauth'
+export const REFRESH = 'refresh'
 export const SET_AUTH_REDIRECT = 'set auth redirect'
 
 export const FETCH_MESSAGE = 'fetch message'
 
+
+// HELPERS
+
+const handleTokens = dispatch => response => {
+  const { refreshToken, accessToken } = response.data
+  if (refreshToken) {
+    dispatch({
+      type: AUTH,
+      payload: { refreshToken, accessToken },
+    })
+  } else {
+    dispatch({
+      type: REFRESH,
+      payload: { refreshToken },
+    })
+  }
+}
+
+const handleErrors = error => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Response:')  // eslint-disable-line no-console
+    console.dir(error.response)  // eslint-disable-line no-console
+    if (error.response) {
+      console.log('Status code:')  // eslint-disable-line no-console
+      console.log(error.response.status)  // eslint-disable-line no-console
+      console.log('Response data:')  // eslint-disable-line no-console
+      console.dir(error.response.data)  // eslint-disable-line no-console
+    }
+  }
+  let message = 'Network error'
+  if (error.response) {
+    if (error.response.status === 401 || error.response.status === 422) {
+      message = error.response.data
+    }
+  }
+  throw new SubmissionError({ _error: message })
+}
+
+const decode = token => token.replace(/-/g, '.')
+
+
+// ACTIONS
 
 export const setAuthRedirect = location => ({
   type: SET_AUTH_REDIRECT,
   payload: location,
 })
 
-export const signUp = ({ email, password }) => dispatch =>
-  axios.post(`${API_ROOT}/signup`, { email, password })
-    .then(response => {
-      localStorage.setItem('token', response.data.token)
-      dispatch({ type: AUTH })
-    })
-    .catch(error => {
-      if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
-      const message = error.response && error.response.status === 422
-        ? error.response.data.error || error.response.data.errorMessage
-        : 'Network error'
-      throw new SubmissionError({ _error: message })
-    })
+export const signUp = ({ email, password }) => () =>
+  axios({
+    method: 'post',
+    url: `${API_ROOT}/signup`,
+    data: { email, password },
+  })
+    .catch(handleErrors)
 
 export const signIn = ({ email, password }) => dispatch =>
-  axios.post(`${API_ROOT}/signin`, { email, password })
-    .then(response => {
-      localStorage.setItem('token', response.data.token)
-      dispatch({ type: AUTH })
-    })
-    .catch(error => {
-      if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
-      const message = error.response && error.response.status === 401
-        ? 'Invalid credentials'
-        : 'Network error'
-      throw new SubmissionError({ _error: message })
-    })
+  axios({
+    method: 'patch',
+    url: `${API_ROOT}/signin`,
+    data: { email, password },
+  })
+    .then(handleTokens(dispatch))
+    .catch(handleErrors)
 
-export const signOut = () => {
-  localStorage.removeItem('token')
-  return { type: UNAUTH }
-}
+export const signOut = () => ({ type: UNAUTH })
 
-export const fetchMessage = () => dispatch =>
-  axios.get(`${API_ROOT}/feature`, {
-    headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
+export const verifyEmail = token => dispatch =>
+  axios({
+    method: 'patch',
+    url: `${API_ROOT}/verifyemail`,
+    headers: { authorization: `Bearer ${decode(token)}` },
+  })
+    .then(handleTokens(dispatch))
+    .catch(handleErrors)
+
+export const fetchMessage = () => (dispatch, getState) =>
+  axios({
+    method: 'get',
+    url: `${API_ROOT}/feature`,
+    headers: { authorization: `Bearer ${getState().auth.accessToken}` },
   })
     .then(response => {
       dispatch({
@@ -68,12 +110,29 @@ export const fetchMessage = () => dispatch =>
     })
 
 
+// REDUCER
+
 export default (state = {}, { type, payload }) => {
   switch (type) {  // eslint-disable-line default-case
     case AUTH:
-      return { ...state, authenticated: true }
+      return {
+        ...state,
+        authenticated: true,
+        refreshToken: payload.refreshToken,
+        accessToken: payload.accessToken,
+      }
     case UNAUTH:
-      return { ...state, authenticated: false }
+      return {
+        ...state,
+        authenticated: false,
+        refreshToken: undefined,
+        accessToken: undefined,
+      }
+    case REFRESH:
+      return {
+        ...state,
+        accessToken: payload.accessToken,
+      }
     case SET_AUTH_REDIRECT:
       return { ...state, redirectLocation: payload }
     case FETCH_MESSAGE:

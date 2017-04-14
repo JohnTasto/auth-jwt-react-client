@@ -36,6 +36,17 @@ describe('<SignUp />', () => {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
+  test('Renders success message if submit succeeded', () => {
+    const wrapper = shallow(
+      <SignUpComp
+        submitSucceeded
+        handleSubmit={jest.fn()}
+        setAuthRedirect={jest.fn()}
+        location={{}}
+      />
+    )
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
 
   describe('Integration', () => {
     const emailError = 'input[name="email"] ~ .error'

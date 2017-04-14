@@ -52,3 +52,11 @@ exports[`<SignUp /> Renders sign out button if authenticated 1`] = `
   </button>
 </div>
 `;
+
+exports[`<SignUp /> Renders success message if submit succeeded 1`] = `
+<div>
+  <p>
+    Thank you for signing up. Check your email to verify your account.
+  </p>
+</div>
+`;

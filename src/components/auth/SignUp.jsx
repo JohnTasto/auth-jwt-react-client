@@ -35,14 +35,6 @@ export class SignUp extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { authenticated, submitSucceeded, history, redirectLocation } = nextProps
-    if (submitSucceeded && authenticated && redirectLocation) {
-      history.push(redirectLocation)
-      this.props.setAuthRedirect(undefined)
-    }
-  }
-
   renderAlert() {
     if (this.props.error) {
       return (
@@ -55,13 +47,21 @@ export class SignUp extends Component {
   }
 
   render() {
-    const { authenticated, handleSubmit, invalid, submitting } = this.props
+    const { authenticated, handleSubmit, invalid, submitting, submitSucceeded } = this.props
 
     if (authenticated) {
       return (
         <div>
           <p>You are already signed in.</p>
           <button onClick={this.props.signOut}>Sign Out</button>
+        </div>
+      )
+    }
+
+    if (submitSucceeded) {
+      return (
+        <div>
+          <p>Thank you for signing up. Check your email to verify your account.</p>
         </div>
       )
     }
