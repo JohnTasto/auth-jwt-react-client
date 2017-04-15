@@ -1,17 +1,17 @@
 import { createStore, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'  // eslint-disable-line import/no-extraneous-dependencies
-// import { routerMiddleware } from 'react-router-redux'
-// import createHistory from 'history/createBrowserHistory'
+import { routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 import rootReducer from './ducks'
 
 
-// export const history = createHistory()
+export const history = createHistory()
 
 
 function createStoreProd(initialState) {
   const middlewares = [
-    // routerMiddleware(history),
+    routerMiddleware(history),
     thunk,
   ]
 
@@ -29,7 +29,7 @@ function createStoreDev(initialState) {
 
     // dispatch navigation actions from anywhere
     // store.dispatch(push('/foo'))
-    // routerMiddleware(history),
+    routerMiddleware(history),
 
     thunk,
   ]

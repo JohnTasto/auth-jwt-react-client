@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { ConnectedRouter as Router } from 'react-router-redux'
 import throttle from 'lodash/throttle'
-// import { ConnectedRouter as Router } from 'react-router-redux'
 
-import createStore, { saveState, loadState /* , history */ } from './store'
+import createStore, { saveState, loadState, history } from './store'
 import App from './components/App'
 
 import './style/style.css'
@@ -24,8 +23,7 @@ store.subscribe(throttle(() => {
 
 ReactDOM.render(
   <Provider store={store}>
-    {/* <Router history={history}> */}
-    <Router>
+    <Router history={history}>
       <App />
     </Router>
   </Provider>
