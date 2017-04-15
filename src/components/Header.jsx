@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { actions as authActions } from '../ducks/auth'
+
 
 export class Header extends Component {
   renderLinks() {
     if (this.props.authenticated) {
       return (
         <li className="nav-item">
-          <Link className="nav-link" to="/signout">Sign Out</Link>
+          <Link className="nav-link" to="/" onClick={this.props.signOut}>Sign Out</Link>
         </li>
       )
     } else {  // eslint-disable-line no-else-return
@@ -37,10 +39,11 @@ export class Header extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
+export default connect(
+  state => ({
     authenticated: state.auth.authenticated,
-  }
-}
-
-export default connect(mapStateToProps)(Header)
+  }),
+  authActions,
+  (...props) =>
+    Object.assign({}, ...props),
+)(Header)

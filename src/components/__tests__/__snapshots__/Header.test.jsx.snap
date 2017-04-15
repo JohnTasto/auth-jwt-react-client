@@ -82,7 +82,7 @@ exports[`<Header /> Renders signout link if authenticated 1`] = `
       <Link
         className="nav-link"
         replace={false}
-        to="/signout"
+        to="/"
       >
         Sign Out
       </Link>

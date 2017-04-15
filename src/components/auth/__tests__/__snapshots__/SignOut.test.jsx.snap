@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<SignOut /> Renders a message 1`] = `
-<div>
-  Sorry to see you go...
-</div>
-`;
