@@ -75,7 +75,7 @@ describe('<SignUp />', () => {
     })
 
 
-    test('Calls action signUp with specified email and password', () => {
+    test('Calls action auth.signUp with specified email and password', () => {
       const user = {
         email: 'e@m.ail',
         password: 'Password1',

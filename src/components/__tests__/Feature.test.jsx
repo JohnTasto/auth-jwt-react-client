@@ -10,7 +10,7 @@ describe('<Feature />', () => {
     message: 'hello',
   }
 
-  test('Calls action fetchMessage before mount', () => {
+  test('Calls action auth.fetchMessage before mount', () => {
     mount(<Feature {...props} />)
     expect(props.fetchMessage.mock.calls.length).toBe(1)
   })

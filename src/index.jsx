@@ -6,6 +6,7 @@ import throttle from 'lodash/throttle'
 
 import createStore, { saveState, loadState, history } from './store'
 import App from './components/App'
+import { actions as errorActions } from './ducks/error'
 
 import './style/style.css'
 
@@ -20,6 +21,9 @@ store.subscribe(throttle(() => {
   })
 }, 1000))
 
+history.listen(() => {
+  store.dispatch(errorActions.clear())
+})
 
 ReactDOM.render(
   <Provider store={store}>

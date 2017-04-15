@@ -63,7 +63,7 @@ describe('<SignIn />', () => {
     })
 
 
-    test('Calls action signIn with specified email and password', () => {
+    test('Calls action auth.signIn with specified email and password', () => {
       const user = {
         email: 'e@m.ail',
         password: 'password',

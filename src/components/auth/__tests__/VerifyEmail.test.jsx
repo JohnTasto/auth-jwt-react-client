@@ -20,7 +20,7 @@ describe('<VerifyEmail />', () => {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  test('Calls action verifyEmail with token on mount', () => {
+  test('Calls action auth.verifyEmail with token on mount', () => {
     const props = {
       setRedirect: jest.fn(),
       verifyEmail: jest.fn(() => Promise.resolve()),
@@ -51,7 +51,7 @@ describe('<VerifyEmail />', () => {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  test('Calls action setRedirect if no location has been set', () => {
+  test('Calls action auth.setRedirect if no location has been set', () => {
     const props = {
       authenticated: true,
       setRedirect: jest.fn(),

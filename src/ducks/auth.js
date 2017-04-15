@@ -34,7 +34,7 @@ const handleTokens = dispatch => response => {
   })
 }
 
-const handleErrors = error => {
+const handleErrors = dispatch => error => {
   if (process.env.NODE_ENV === 'development') {
     console.log('Response:')  // eslint-disable-line no-console
     console.dir(error.response)  // eslint-disable-line no-console
@@ -45,13 +45,12 @@ const handleErrors = error => {
       console.dir(error.response.data)  // eslint-disable-line no-console
     }
   }
-  let message = 'Network error'
   if (error.response) {
     if (error.response.status === 401 || error.response.status === 422) {
-      message = error.response.data
+      throw new SubmissionError({ _error: error.response.data })
     }
   }
-  throw new SubmissionError({ _error: message })
+  dispatch({ type: null, error: 'Network error' })
 }
 
 const decode = token => token.replace(/~/g, '.')
@@ -68,13 +67,13 @@ export const actions = {
     redirectLocation,
   }),
 
-  signUp: ({ email, password }) => () =>
+  signUp: ({ email, password }) => dispatch =>
     axios({
       method: 'post',
       url: `${API_ROOT}/signup`,
       data: { email, password },
     })
-      .catch(handleErrors),
+      .catch(handleErrors(dispatch)),
 
   signIn: ({ email, password }) => dispatch =>
     axios({
@@ -83,7 +82,7 @@ export const actions = {
       data: { email, password },
     })
       .then(handleTokens(dispatch))
-      .catch(handleErrors),
+      .catch(handleErrors(dispatch)),
 
   signOut: () => (dispatch, getState) =>
     axios({
@@ -117,7 +116,7 @@ export const actions = {
       headers: { authorization: `Bearer ${decode(token)}` },
     })
       .then(handleTokens(dispatch))
-      .catch(handleErrors),
+      .catch(handleErrors(dispatch)),
 
   fetchMessage: () => (dispatch, getState) =>
     axios({

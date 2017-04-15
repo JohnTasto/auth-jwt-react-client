@@ -2,6 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 
 import Header from './Header'
+import Alert from './Alert'
 import SignUp from './auth/SignUp'
 import SignIn from './auth/SignIn'
 import VerifyEmail from './auth/VerifyEmail'
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <div>
       <Header />
+      <Alert />
       <Route path="/" exact component={Welcome} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />

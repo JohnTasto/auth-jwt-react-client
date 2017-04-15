@@ -43,7 +43,7 @@ describe('<Header />', () => {
       )
     })
 
-    test('Calls action signOut when signout link is clicked', () => {
+    test('Calls action auth.signOut when signout link is clicked', () => {
       wrapper.find('li a[href="/"]').simulate('click')
 
       expect(props.signOut).toHaveBeenCalled()

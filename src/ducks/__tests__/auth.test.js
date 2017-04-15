@@ -71,17 +71,15 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([])
     })
 
-    test('on any other error: throws SubmissionError("Network error")', async () => {
+    test('on any other error: creates action with error', async () => {
+      const expectedActions = [
+        { type: null, error: 'Network error' },
+      ]
       const store = mockStore()
 
-      const signUpPromise = store.dispatch(auth.actions.signUp(user))
+      await store.dispatch(auth.actions.signUp(user))
 
-      // TODO: replace with expect().rejects in Jest 20+
-      await signUpPromise.catch(error => {
-        expect(error).toBeInstanceOf(SubmissionError)
-        expect(error.errors._error).toEqual('Network error')
-      })
-      expect(store.getActions()).toEqual([])
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
@@ -128,17 +126,15 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([])
     })
 
-    test('on any other error: throws SubmissionError("Network error")', async () => {
+    test('on any other error: creates action with error', async () => {
+      const expectedActions = [
+        { type: null, error: 'Network error' },
+      ]
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.actions.signIn(user))
+      await store.dispatch(auth.actions.signIn(user))
 
-      // TODO: replace with expect().rejects in Jest 20+
-      await signInPromise.catch(error => {
-        expect(error).toBeInstanceOf(SubmissionError)
-        expect(error.errors._error).toEqual('Network error')
-      })
-      expect(store.getActions()).toEqual([])
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
@@ -207,17 +203,15 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([])
     })
 
-    test('on any other error: throws SubmissionError("Network error")', async () => {
+    test('on any other error: creates action with error', async () => {
+      const expectedActions = [
+        { type: null, error: 'Network error' },
+      ]
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.actions.verifyEmail(emailToken))
+      await store.dispatch(auth.actions.verifyEmail(emailToken))
 
-      // TODO: replace with expect().rejects in Jest 20+
-      await signInPromise.catch(error => {
-        expect(error).toBeInstanceOf(SubmissionError)
-        expect(error.errors._error).toEqual('Network error')
-      })
-      expect(store.getActions()).toEqual([])
+      expect(store.getActions()).toEqual(expectedActions)
     })
   })
 
