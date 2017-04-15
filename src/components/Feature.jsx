@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../ducks/auth'
+import { actions as authActions } from '../ducks/auth'
 
 export class Feature extends Component {
   componentWillMount() {
@@ -18,4 +18,4 @@ function mapStateToProps(state) {
   return { message: state.auth.message }
 }
 
-export default connect(mapStateToProps, actions)(Feature)
+export default connect(mapStateToProps, authActions)(Feature)
