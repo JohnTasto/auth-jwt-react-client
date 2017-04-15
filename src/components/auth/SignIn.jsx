@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { v4 } from 'uuid'
-import * as actions from '../../ducks/auth'
+import { actions as authActions } from '../../ducks/auth'
 import { requiredValidator, emailValidator } from '../../helpers/validators'
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
@@ -20,12 +20,12 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 
 export class SignIn extends Component {
   componentWillMount() {
-    const { location, redirectLocation, setAuthRedirect } = this.props
+    const { location, redirectLocation, setRedirect } = this.props
     if (!redirectLocation) {
       if (location.state && location.state.from) {
-        setAuthRedirect(location.state.from)
+        setRedirect(location.state.from)
       } else {
-        setAuthRedirect({ pathname: '/' })
+        setRedirect({ pathname: '/' })
       }
     }
   }
@@ -34,7 +34,7 @@ export class SignIn extends Component {
     const { authenticated, submitSucceeded, history, redirectLocation } = nextProps
     if (submitSucceeded && authenticated && redirectLocation) {
       history.push(redirectLocation)
-      this.props.setAuthRedirect(undefined)
+      this.props.setRedirect(undefined)
     }
   }
 
@@ -92,7 +92,7 @@ export default connect(
     errorMessage: state.auth.error,
     redirectLocation: state.auth.redirectLocation,
   }),
-  actions,
+  authActions,
   (...props) =>
     Object.assign({}, ...props),
 )(reduxForm({

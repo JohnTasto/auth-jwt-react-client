@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../ducks/auth'
+import { actions as authActions } from '../../ducks/auth'
 
 export class SignOut extends Component {
   componentWillMount() {
@@ -15,4 +15,4 @@ export class SignOut extends Component {
 const mergeProps = (...props) =>
   Object.assign({}, ...props)
 
-export default connect(null, actions, mergeProps)(SignOut)
+export default connect(null, authActions, mergeProps)(SignOut)

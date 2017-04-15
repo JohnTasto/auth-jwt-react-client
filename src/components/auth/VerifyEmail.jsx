@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../ducks/auth'
+import { actions as authActions } from '../../ducks/auth'
 
 
 export class VerifyEmail extends Component {
@@ -10,9 +10,9 @@ export class VerifyEmail extends Component {
   }
 
   componentWillMount() {
-    const { verifyEmail, match, authenticated, redirectLocation, setAuthRedirect } = this.props
+    const { verifyEmail, match, authenticated, redirectLocation, setRedirect } = this.props
     if (!redirectLocation) {
-      setAuthRedirect({ pathname: '/' })
+      setRedirect({ pathname: '/' })
     }
     if (authenticated) {
       this.setState({ preauthed: true })
@@ -27,9 +27,9 @@ export class VerifyEmail extends Component {
   }
 
   redirect = () => {
-    const { history, redirectLocation, setAuthRedirect } = this.props
+    const { history, redirectLocation, setRedirect } = this.props
     history.push(redirectLocation)
-    setAuthRedirect(undefined)
+    setRedirect(undefined)
   }
 
   render() {
@@ -75,7 +75,7 @@ export default connect(
     authenticated: state.auth.authenticated,
     redirectLocation: state.auth.redirectLocation,
   }),
-  actions,
+  authActions,
   (...props) =>
     Object.assign({}, ...props),
 )(VerifyEmail)

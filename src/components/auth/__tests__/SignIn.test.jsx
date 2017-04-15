@@ -17,7 +17,7 @@ describe('<SignIn />', () => {
     const wrapper = shallow(
       <SignInComp
         handleSubmit={jest.fn()}
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
         location={{}}
       />
     )
@@ -29,7 +29,7 @@ describe('<SignIn />', () => {
       <SignInComp
         authenticated
         handleSubmit={jest.fn()}
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
         location={{}}
       />
     )

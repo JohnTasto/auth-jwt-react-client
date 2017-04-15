@@ -12,7 +12,7 @@ describe('<VerifyEmail />', () => {
 
   test('Renders message indicating email verification is in progress', () => {
     const props = {
-      setAuthRedirect: jest.fn(),
+      setRedirect: jest.fn(),
       verifyEmail: jest.fn(() => Promise.resolve()),
       match: { params: { token: '42' } }
     }
@@ -22,7 +22,7 @@ describe('<VerifyEmail />', () => {
 
   test('Calls action verifyEmail with token on mount', () => {
     const props = {
-      setAuthRedirect: jest.fn(),
+      setRedirect: jest.fn(),
       verifyEmail: jest.fn(() => Promise.resolve()),
       match: { params: { token: '42' } }
     }
@@ -32,7 +32,7 @@ describe('<VerifyEmail />', () => {
 
   test('Renders redirect message if authentication state changes to true', () => {
     const props = {
-      setAuthRedirect: jest.fn(),
+      setRedirect: jest.fn(),
       verifyEmail: jest.fn(() => Promise.resolve()),
       match: { params: { token: '42' } }
     }
@@ -45,26 +45,26 @@ describe('<VerifyEmail />', () => {
     const wrapper = shallow(
       <VerifyEmailComp
         authenticated
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
       />
     )
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  test('Calls action setAuthRedirect if no location has been set', () => {
+  test('Calls action setRedirect if no location has been set', () => {
     const props = {
       authenticated: true,
-      setAuthRedirect: jest.fn(),
+      setRedirect: jest.fn(),
     }
     shallow(<VerifyEmailComp {...props} />)
-    expect(props.setAuthRedirect).toHaveBeenCalled()
+    expect(props.setRedirect).toHaveBeenCalled()
   })
 
   // it would be better to have verifyEmail: jest.fn(() => Promise.reject(...)
   // but I couldn't figure out how to get enzyme to wait for the promise
   test('Renders error on error', () => {
     const props = {
-      setAuthRedirect: jest.fn(),
+      setRedirect: jest.fn(),
       verifyEmail: jest.fn(() => Promise.resolve()),
       match: { params: { token: '42' } }
     }

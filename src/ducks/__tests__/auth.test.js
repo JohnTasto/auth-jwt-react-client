@@ -47,7 +47,7 @@ describe('auth actions', () => {
         .reply(201)
       const store = mockStore()
 
-      await store.dispatch(auth.signUp(user))
+      await store.dispatch(auth.actions.signUp(user))
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual([])
@@ -60,7 +60,7 @@ describe('auth actions', () => {
         .reply(422, errorMessage)
       const store = mockStore()
 
-      const signUpPromise = store.dispatch(auth.signUp(user))
+      const signUpPromise = store.dispatch(auth.actions.signUp(user))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signUpPromise.catch(error => {
@@ -74,7 +74,7 @@ describe('auth actions', () => {
     test('on any other error: throws SubmissionError("Network error")', async () => {
       const store = mockStore()
 
-      const signUpPromise = store.dispatch(auth.signUp(user))
+      const signUpPromise = store.dispatch(auth.actions.signUp(user))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signUpPromise.catch(error => {
@@ -99,12 +99,12 @@ describe('auth actions', () => {
         .patch('/signin', user)
         .reply(200, { refreshToken, accessToken })
       const expectedActions = [
-        { type: auth.AUTH, payload: { refreshToken } },
-        { type: auth.REFRESH, payload: { accessToken } },
+        { type: auth.types.AUTH, payload: { refreshToken } },
+        { type: auth.types.REFRESH, payload: { accessToken } },
       ]
       const store = mockStore()
 
-      await store.dispatch(auth.signIn(user))
+      await store.dispatch(auth.actions.signIn(user))
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
@@ -117,7 +117,7 @@ describe('auth actions', () => {
         .reply(401, errorMessage)
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.signIn(user))
+      const signInPromise = store.dispatch(auth.actions.signIn(user))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signInPromise.catch(error => {
@@ -131,7 +131,7 @@ describe('auth actions', () => {
     test('on any other error: throws SubmissionError("Network error")', async () => {
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.signIn(user))
+      const signInPromise = store.dispatch(auth.actions.signIn(user))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signInPromise.catch(error => {
@@ -152,11 +152,11 @@ describe('auth actions', () => {
         .patch('/signout')
         .reply(200)
       const expectedActions = [{
-        type: auth.UNAUTH,
+        type: auth.types.UNAUTH,
       }]
       const store = mockStore({ auth: { refresh: { token } } })
 
-      await store.dispatch(auth.signOut())
+      await store.dispatch(auth.actions.signOut())
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
@@ -176,12 +176,12 @@ describe('auth actions', () => {
         .patch('/verifyemail')
         .reply(200, { refreshToken, accessToken })
       const expectedActions = [
-        { type: auth.AUTH, payload: { refreshToken } },
-        { type: auth.REFRESH, payload: { accessToken } },
+        { type: auth.types.AUTH, payload: { refreshToken } },
+        { type: auth.types.REFRESH, payload: { accessToken } },
       ]
       const store = mockStore()
 
-      await store.dispatch(auth.verifyEmail(emailToken))
+      await store.dispatch(auth.actions.verifyEmail(emailToken))
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
@@ -196,7 +196,7 @@ describe('auth actions', () => {
         .reply(401, errorMessage)
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.verifyEmail(emailToken))
+      const signInPromise = store.dispatch(auth.actions.verifyEmail(emailToken))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signInPromise.catch(error => {
@@ -210,7 +210,7 @@ describe('auth actions', () => {
     test('on any other error: throws SubmissionError("Network error")', async () => {
       const store = mockStore()
 
-      const signInPromise = store.dispatch(auth.verifyEmail(emailToken))
+      const signInPromise = store.dispatch(auth.actions.verifyEmail(emailToken))
 
       // TODO: replace with expect().rejects in Jest 20+
       await signInPromise.catch(error => {
@@ -232,12 +232,12 @@ describe('auth actions', () => {
         .get('/feature')
         .reply(200, { message })
       const expectedActions = [{
-        type: auth.FETCH_MESSAGE,
+        type: auth.types.FETCH_MESSAGE,
         payload: message,
       }]
       const store = mockStore({ auth: { access: { token } } })
 
-      await store.dispatch(auth.fetchMessage())
+      await store.dispatch(auth.actions.fetchMessage())
 
       expect(scope.isDone()).toBe(true)
       expect(store.getActions()).toEqual(expectedActions)
@@ -254,11 +254,11 @@ describe('auth actions', () => {
         .patch('/signout')
         .reply(200)
       const expectedActions = [{
-        type: auth.UNAUTH,
+        type: auth.types.UNAUTH,
       }]
       const store = mockStore({ auth: { access: { token }, refresh: { token } } })
 
-      await store.dispatch(auth.fetchMessage())
+      await store.dispatch(auth.actions.fetchMessage())
 
       expect(scopeFeature.isDone()).toBe(true)
       expect(scopeSignOut.isDone()).toBe(true)

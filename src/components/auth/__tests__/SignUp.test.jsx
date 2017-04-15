@@ -17,7 +17,7 @@ describe('<SignUp />', () => {
     const wrapper = shallow(
       <SignUpComp
         handleSubmit={jest.fn()}
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
         location={{}}
       />
     )
@@ -29,7 +29,7 @@ describe('<SignUp />', () => {
       <SignUpComp
         authenticated
         handleSubmit={jest.fn()}
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
         location={{}}
       />
     )
@@ -41,7 +41,7 @@ describe('<SignUp />', () => {
       <SignUpComp
         submitSucceeded
         handleSubmit={jest.fn()}
-        setAuthRedirect={jest.fn()}
+        setRedirect={jest.fn()}
         location={{}}
       />
     )

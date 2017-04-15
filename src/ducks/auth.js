@@ -8,12 +8,14 @@ const API_ROOT = process.env.API_ROOT
 
 // TYPES
 
-export const AUTH = 'auth'
-export const UNAUTH = 'unauth'
-export const REFRESH = 'refresh'
-export const SET_AUTH_REDIRECT = 'set auth redirect'
+export const types = {
+  AUTH: 'auth auth',
+  UNAUTH: 'auth unauth',
+  REFRESH: 'auth refresh',
+  SET_REDIRECT: 'auth set redirect',
 
-export const FETCH_MESSAGE = 'fetch message'
+  FETCH_MESSAGE: 'auth fetch message',
+}
 
 
 // HELPERS
@@ -22,12 +24,12 @@ const handleTokens = dispatch => response => {
   const { refreshToken, accessToken } = response.data
   if (refreshToken) {
     dispatch({
-      type: AUTH,
+      type: types.AUTH,
       payload: { refreshToken },
     })
   }
   dispatch({
-    type: REFRESH,
+    type: types.REFRESH,
     payload: { accessToken },
   })
 }
@@ -59,71 +61,73 @@ const exp = token => jwt.decode(token, null, true).exp
 
 // ACTIONS
 
-export const setAuthRedirect = location => ({
-  type: SET_AUTH_REDIRECT,
-  payload: location,
-})
+export const actions = {
 
-export const signUp = ({ email, password }) => () =>
-  axios({
-    method: 'post',
-    url: `${API_ROOT}/signup`,
-    data: { email, password },
-  })
-    .catch(handleErrors)
+  setRedirect: location => ({
+    type: types.SET_REDIRECT,
+    payload: location,
+  }),
 
-export const signIn = ({ email, password }) => dispatch =>
-  axios({
-    method: 'patch',
-    url: `${API_ROOT}/signin`,
-    data: { email, password },
-  })
-    .then(handleTokens(dispatch))
-    .catch(handleErrors)
+  signUp: ({ email, password }) => () =>
+    axios({
+      method: 'post',
+      url: `${API_ROOT}/signup`,
+      data: { email, password },
+    })
+      .catch(handleErrors),
 
-export const signOut = () => (dispatch, getState) =>
-  axios({
-    method: 'patch',
-    url: `${API_ROOT}/signout`,
-    headers: { authorization: `Bearer ${getState().auth.refresh.token}` },
-  })
-    .then(() => dispatch({ type: UNAUTH }))
-    .catch(() => dispatch({ type: UNAUTH }))
+  signIn: ({ email, password }) => dispatch =>
+    axios({
+      method: 'patch',
+      url: `${API_ROOT}/signin`,
+      data: { email, password },
+    })
+      .then(handleTokens(dispatch))
+      .catch(handleErrors),
 
-export const verifyEmail = token => dispatch =>
-  axios({
-    method: 'patch',
-    url: `${API_ROOT}/verifyemail`,
-    headers: { authorization: `Bearer ${decode(token)}` },
-  })
-    .then(handleTokens(dispatch))
-    .catch(handleErrors)
+  signOut: () => (dispatch, getState) =>
+    axios({
+      method: 'patch',
+      url: `${API_ROOT}/signout`,
+      headers: { authorization: `Bearer ${getState().auth.refresh.token}` },
+    })
+      .then(() => dispatch({ type: types.UNAUTH }))
+      .catch(() => dispatch({ type: types.UNAUTH })),
 
-export const fetchMessage = () => (dispatch, getState) =>
-  axios({
-    method: 'get',
-    url: `${API_ROOT}/feature`,
-    headers: { authorization: `Bearer ${getState().auth.access.token}` },
-  })
-    .then(response => {
-      dispatch({
-        type: FETCH_MESSAGE,
-        payload: response.data.message,
+  verifyEmail: token => dispatch =>
+    axios({
+      method: 'patch',
+      url: `${API_ROOT}/verifyemail`,
+      headers: { authorization: `Bearer ${decode(token)}` },
+    })
+      .then(handleTokens(dispatch))
+      .catch(handleErrors),
+
+  fetchMessage: () => (dispatch, getState) =>
+    axios({
+      method: 'get',
+      url: `${API_ROOT}/feature`,
+      headers: { authorization: `Bearer ${getState().auth.access.token}` },
+    })
+      .then(response => {
+        dispatch({
+          type: types.FETCH_MESSAGE,
+          payload: response.data.message,
+        })
       })
-    })
-    .catch(error => {
-      if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
-      if (error.response && error.response.status === 401) {
-        return dispatch(signOut())
-      }
-    })
-
+      .catch(error => {
+        if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
+        if (error.response && error.response.status === 401) {
+          return dispatch(actions.signOut())
+        }
+      }),
+}
 
 // REDUCER
 
 export default (state = {}, { type, payload }) => {
   switch (type) {  // eslint-disable-line default-case
-    case AUTH:
+    case types.AUTH:
       return {
         ...state,
         authenticated: true,
@@ -132,14 +136,14 @@ export default (state = {}, { type, payload }) => {
           exp: exp(payload.refreshToken),
         },
       }
-    case UNAUTH:
+    case types.UNAUTH:
       return {
         ...state,
         authenticated: false,
         refresh: undefined,
         access: undefined,
       }
-    case REFRESH:
+    case types.REFRESH:
       return {
         ...state,
         access: {
@@ -147,9 +151,9 @@ export default (state = {}, { type, payload }) => {
           exp: exp(payload.accessToken),
         },
       }
-    case SET_AUTH_REDIRECT:
+    case types.SET_REDIRECT:
       return { ...state, redirectLocation: payload }
-    case FETCH_MESSAGE:
+    case types.FETCH_MESSAGE:
       return { ...state, message: payload }
   }
   return state
