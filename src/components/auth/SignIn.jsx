@@ -33,7 +33,7 @@ export class SignIn extends Component {
   componentWillReceiveProps(nextProps) {
     const { authenticated, submitSucceeded, history, redirectLocation } = nextProps
     if (submitSucceeded && authenticated && redirectLocation) {
-      history.push(redirectLocation)
+      history.replace(redirectLocation)
       this.props.setRedirect(undefined)
     }
   }

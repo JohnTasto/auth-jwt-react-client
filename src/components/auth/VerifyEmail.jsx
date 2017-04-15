@@ -28,7 +28,7 @@ export class VerifyEmail extends Component {
 
   redirect = () => {
     const { history, redirectLocation, setRedirect } = this.props
-    history.push(redirectLocation)
+    history.replace(redirectLocation)
     setRedirect(undefined)
   }
 
