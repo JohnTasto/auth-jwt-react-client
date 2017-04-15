@@ -99,8 +99,8 @@ describe('auth actions', () => {
         .patch('/signin', user)
         .reply(200, { refreshToken, accessToken })
       const expectedActions = [
-        { type: auth.types.AUTH, payload: { refreshToken } },
-        { type: auth.types.REFRESH, payload: { accessToken } },
+        { type: auth.types.AUTH, refreshToken },
+        { type: auth.types.REFRESH, accessToken },
       ]
       const store = mockStore()
 
@@ -176,8 +176,8 @@ describe('auth actions', () => {
         .patch('/verifyemail')
         .reply(200, { refreshToken, accessToken })
       const expectedActions = [
-        { type: auth.types.AUTH, payload: { refreshToken } },
-        { type: auth.types.REFRESH, payload: { accessToken } },
+        { type: auth.types.AUTH, refreshToken },
+        { type: auth.types.REFRESH, accessToken },
       ]
       const store = mockStore()
 
@@ -231,10 +231,9 @@ describe('auth actions', () => {
       })
         .get('/feature')
         .reply(200, { message })
-      const expectedActions = [{
-        type: auth.types.FETCH_MESSAGE,
-        payload: message,
-      }]
+      const expectedActions = [
+        { type: auth.types.FETCH_MESSAGE, message },
+      ]
       const store = mockStore({ auth: { access: { token } } })
 
       await store.dispatch(auth.actions.fetchMessage())

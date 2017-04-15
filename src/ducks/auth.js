@@ -25,12 +25,12 @@ const handleTokens = dispatch => response => {
   if (refreshToken) {
     dispatch({
       type: types.AUTH,
-      payload: { refreshToken },
+      refreshToken,
     })
   }
   dispatch({
     type: types.REFRESH,
-    payload: { accessToken },
+    accessToken,
   })
 }
 
@@ -63,9 +63,9 @@ const exp = token => jwt.decode(token, null, true).exp
 
 export const actions = {
 
-  setRedirect: location => ({
+  setRedirect: redirectLocation => ({
     type: types.SET_REDIRECT,
-    payload: location,
+    redirectLocation,
   }),
 
   signUp: ({ email, password }) => () =>
@@ -94,6 +94,22 @@ export const actions = {
       .then(() => dispatch({ type: types.UNAUTH }))
       .catch(() => dispatch({ type: types.UNAUTH })),
 
+  // refresh: () => (dispatch, getState) =>
+  //   axios({
+  //     method: 'get',
+  //     url: `${API_ROOT}/refresh`,
+  //     headers: { authorization: `Bearer ${getState().auth.refresh.token}` },
+  //   })
+  //     .then(handleTokens(dispatch))
+  //     .catch(error => {
+  //       if (process.env.NODE_ENV === 'development') console.dir(error)  // eslint-disable-line no-console
+  //       if (error.response && error.response.status === 401) {
+  //         return dispatch(signOut())
+  //       } else {
+
+  //       }
+  //     }),
+
   verifyEmail: token => dispatch =>
     axios({
       method: 'patch',
@@ -112,7 +128,7 @@ export const actions = {
       .then(response => {
         dispatch({
           type: types.FETCH_MESSAGE,
-          payload: response.data.message,
+          message: response.data.message,
         })
       })
       .catch(error => {
@@ -125,15 +141,23 @@ export const actions = {
 
 // REDUCER
 
-export default (state = {}, { type, payload }) => {
+export default (state = {}, action) => {
+  const {
+    type,
+    refreshToken,
+    accessToken,
+    redirectLocation,
+    message,
+  } = action
+
   switch (type) {  // eslint-disable-line default-case
     case types.AUTH:
       return {
         ...state,
         authenticated: true,
         refresh: {
-          token: payload.refreshToken,
-          exp: exp(payload.refreshToken),
+          token: refreshToken,
+          exp: exp(refreshToken),
         },
       }
     case types.UNAUTH:
@@ -147,14 +171,14 @@ export default (state = {}, { type, payload }) => {
       return {
         ...state,
         access: {
-          token: payload.accessToken,
-          exp: exp(payload.accessToken),
+          token: accessToken,
+          exp: exp(accessToken),
         },
       }
     case types.SET_REDIRECT:
-      return { ...state, redirectLocation: payload }
+      return { ...state, redirectLocation }
     case types.FETCH_MESSAGE:
-      return { ...state, message: payload }
+      return { ...state, message }
   }
   return state
 }
