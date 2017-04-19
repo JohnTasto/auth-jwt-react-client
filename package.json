@@ -22,6 +22,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
+    "es6-error": "^4.0.2",
     "history": "^4.6.1",
     "jwt-simple": "^0.5.1",
     "lodash": "^4.17.4",

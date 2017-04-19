@@ -10,6 +10,7 @@ import Feature from './Feature'
 import PrivateRoute from './auth/PrivateRoute'
 import Welcome from './Welcome'
 
+
 export default function App() {
   return (
     <div>
@@ -25,8 +26,7 @@ export default function App() {
 }
 
 // TODO:
-//   get new access token when access token expires
-//   sign out when refresh token expires
+//   server: ignore expiration when signing out
 //   create <ResetPassword />
 //   modify <SignIn /> to show a link to reset password
 //   create protected <ChangePassword />
