@@ -9,16 +9,16 @@ export class Header extends Component {
     if (this.props.authenticated) {
       return (
         <li className="nav-item">
-          <Link className="nav-link" to="/" onClick={this.props.signOut}>Sign Out</Link>
+          <Link to="/" className="nav-link" onClick={this.props.signOut}>Sign Out</Link>
         </li>
       )
     } else {  // eslint-disable-line no-else-return
       return ([
         <li className="nav-item" key={1}>
-          <Link className="nav-link" to="/signin">Sign In</Link>
+          <Link to="/signin" className="nav-link">Sign In</Link>
         </li>,
         <li className="nav-item" key={2}>
-          <Link className="nav-link" to="/signup">Sign Up</Link>
+          <Link to="/signup" className="nav-link">Sign Up</Link>
         </li>,
       ])
     }
@@ -30,7 +30,7 @@ export class Header extends Component {
         <Link to="/" className="navbar-brand">Redux Auth</Link>
         <ul className="nav navbar-nav">
           <li className="nav-item">
-            <Link className="nav-link" to="/feature">Feature</Link>
+            <Link to="/feature" className="nav-link">Feature</Link>
           </li>
           {this.renderLinks()}
         </ul>
