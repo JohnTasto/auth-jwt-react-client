@@ -20,7 +20,7 @@ export default function App() {
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/verifyemail/:token" component={VerifyEmail} />
-      <PrivateRoute path="/feature" component={Feature} signInPath="/signin" />
+      <PrivateRoute path="/feature" component={Feature} redirectPath="/signin" />
     </div>
   )
 }

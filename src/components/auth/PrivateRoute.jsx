@@ -5,14 +5,14 @@ import { connect } from 'react-redux'
 import { Route, Redirect, withRouter } from 'react-router-dom'
 
 
-export const PrivateRoute = ({ component: Component, signInPath, authenticated, ...rest }) => (
+export const PrivateRoute = ({ component: Component, redirectPath, authenticated, ...rest }) => (
   <Route
     {...rest}
     render={props => (
       authenticated
         ? (<Component {...props} />)
         : (<Redirect to={{
-            pathname: signInPath,
+            pathname: redirectPath,
             state: { from: props.location },
           }} />)
     )}
